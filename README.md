@@ -1,2 +1,4 @@
-# crystal
-A high modularity backend development framework powered by Plugins Architecture
+# Crystal
+Application Backend Development Framework
+
+## Crystal简介

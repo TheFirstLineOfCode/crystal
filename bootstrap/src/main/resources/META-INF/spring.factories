@@ -1,0 +1,1 @@
+org.springframework.boot.SpringApplicationRunListener=com.thefirstlineofcode.crystal.bootstrap.ApplicationListener
