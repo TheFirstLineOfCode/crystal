@@ -1,4 +1,4 @@
-package com.thefirstlineofcode.crystal.plugins.simple.auth;
+package com.thefirstlineofcode.crystal.plugins.auth;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

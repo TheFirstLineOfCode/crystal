@@ -1,4 +1,4 @@
-package com.thefirstlineofcode.crystal.plugins.simple.auth;
+package com.thefirstlineofcode.crystal.plugins.auth;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

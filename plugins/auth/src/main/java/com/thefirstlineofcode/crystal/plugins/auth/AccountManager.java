@@ -1,4 +1,4 @@
-package com.thefirstlineofcode.crystal.plugins.simple.auth;
+package com.thefirstlineofcode.crystal.plugins.auth;
 
 import com.thefirstlineofcode.crystal.framework.auth.IAccount;
 import com.thefirstlineofcode.crystal.framework.auth.IAccountManager;

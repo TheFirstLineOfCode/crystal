@@ -1,12 +1,18 @@
 package com.thefirstlineofcode.crystal.plugins.hsql.dba;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Properties;
 
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.pf4j.Extension;
+import org.springframework.beans.BeansException;
+import org.springframework.boot.autoconfigure.domain.EntityScanPackages;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -24,9 +30,13 @@ import com.thefirstlineofcode.crystal.framework.config.IConfigurationPropertiesA
 @Extension
 @Configuration
 @EnableTransactionManagement
-public class HSqlDbaConfiguration implements ISpringConfiguration, IConfigurationPropertiesAware {
+public class HSqlDbaConfiguration implements ISpringConfiguration,
+			IConfigurationPropertiesAware, ApplicationContextAware {
+	private static final String PACKAGE_NAME_CRYSTAL_FRAMEWORK = "com.thefirstlineofcode.crystal.framework";
+
 	private static final int DEFAULT_HSQL_PORT = 9001;
 	
+	private ApplicationContext appContext;
 	private int hSqlPort;
 	
 	@Bean
@@ -53,22 +63,32 @@ public class HSqlDbaConfiguration implements ISpringConfiguration, IConfiguratio
 	}
 	
 	@Bean
-	public PlatformTransactionManager transactionManager(DataSource dataSource) {
+	@DependsOn("entityManagerFactory")
+	public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
 		JpaTransactionManager transactionManager = new JpaTransactionManager();
-	    transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
+	    transactionManager.setEntityManagerFactory(entityManagerFactory);
 
 	    return transactionManager;
 	}
 	
 	@Bean
-	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+	@DependsOn("dataSource")
+	public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
 		LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
-		entityManagerFactoryBean.setDataSource(dataSource());
-		// entityManagerFactoryBean.setPackagesToScan("com.thefirstlineofcode.crystal.plugins.auth");
+		entityManagerFactoryBean.setDataSource(dataSource);
+		entityManagerFactoryBean.setPackagesToScan(getEntityScanPackages());
 		entityManagerFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
 		entityManagerFactoryBean.setJpaProperties(getJpaProperties());
 		
 		return entityManagerFactoryBean;
+	}
+	
+	private String[] getEntityScanPackages() {
+		List<String> packages = EntityScanPackages.get(appContext).getPackageNames();
+		if (packages == null || packages.size() == 0)
+			return new String[] {PACKAGE_NAME_CRYSTAL_FRAMEWORK};
+		
+		return packages.toArray(new String[packages.size()]);
 	}
 	
 	@Bean
@@ -114,5 +134,10 @@ public class HSqlDbaConfiguration implements ISpringConfiguration, IConfiguratio
 	@Override
 	public void setConfigurationProperties(IConfigurationProperties properties) {
 		hSqlPort = properties.getInteger("hSqlPort", DEFAULT_HSQL_PORT);
+	}
+	
+	@Override
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		this.appContext = applicationContext;
 	}
 }

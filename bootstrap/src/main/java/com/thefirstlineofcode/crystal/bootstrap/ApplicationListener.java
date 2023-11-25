@@ -135,10 +135,20 @@ public class ApplicationListener implements SpringApplicationRunListener {
 		ConfigurableListableBeanFactory beanFactory = (ConfigurableListableBeanFactory)appContext.getBeanFactory();
 		beanFactory.addBeanPostProcessor(new CrystalBeanPostProcessor(applicationHome, applicationProperties, pluginManager));
 		
-		ClassLoader[] classLoaders = registerSpringConfigurations(configRegistry, pluginManager);
-		if (classLoaders != null) {
-			appContext.setClassLoader(new CompositeClassLoader(classLoaders));
+		ClassLoader[] pluginClassLoaders = registerSpringConfigurations(configRegistry, pluginManager);
+		if (pluginClassLoaders != null) {
+			appContext.setClassLoader(new CompositeClassLoader(getNewAppContextClassLoaders(appContext, pluginClassLoaders)));
 		}
+	}
+
+	private ClassLoader[] getNewAppContextClassLoaders(ConfigurableApplicationContext appContext, ClassLoader[] pluginClassLoaders) {
+		ClassLoader[] newAppContextClassLoaders = new ClassLoader[pluginClassLoaders.length + 1];
+		newAppContextClassLoaders[0] = appContext.getClassLoader();
+		for (int i = 0; i < pluginClassLoaders.length; i++) {
+			newAppContextClassLoaders[i + 1] = pluginClassLoaders[i];
+		}
+		
+		return newAppContextClassLoaders;
 	}
 	
 	protected ClassLoader[] registerSpringConfigurations(AnnotationConfigRegistry configRegistry,
