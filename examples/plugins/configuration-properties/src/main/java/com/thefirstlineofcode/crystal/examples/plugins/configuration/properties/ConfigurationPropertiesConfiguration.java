@@ -1,4 +1,4 @@
-package com.thefirstlineofcode.crystal.examples.plugins.configurationproperties;
+package com.thefirstlineofcode.crystal.examples.plugins.configuration.properties;
 
 import org.pf4j.Extension;
 import org.springframework.context.annotation.Bean;

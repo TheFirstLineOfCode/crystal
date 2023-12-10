@@ -17,6 +17,7 @@
 	
 	<modules>
 		<module>configuration-properties</module>
+		<module>crud</module>
 	</modules>
 </project>
 

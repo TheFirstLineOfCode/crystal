@@ -19,6 +19,7 @@
 	<modules>
 		<module>hsql-dba</module>
 		<module>auth</module>
+		<module>ra-data-woocommerce-adapter</module>
 	</modules>
 </project>
 

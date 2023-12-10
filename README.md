@@ -1,4 +1,4 @@
 # Crystal
-Application Backend Development Framework
+A high modularity WEB Development Framework
 
 ## Crystal简介

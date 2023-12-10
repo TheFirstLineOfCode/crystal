@@ -39,7 +39,7 @@ import com.thefirstlineofcode.crystal.framework.apidocs.annotations.ErrorStatusM
 import com.thefirstlineofcode.crystal.framework.apidocs.annotations.ErrorStatusMappings;
 
 public class RestApiHandlerExceptionResolver implements HandlerExceptionResolver {
-	private static final String HEADER_NAME_KEXIN_ERROR_CODE = "Kexin-Error-Code";
+	private static final String HEADER_NAME_CRYSTAL_ERROR_CODE = "Crystal-Error-Code";
 
 	private final Logger logger = LoggerFactory.getLogger(RestApiHandlerExceptionResolver.class);
 
@@ -76,7 +76,7 @@ public class RestApiHandlerExceptionResolver implements HandlerExceptionResolver
 	private ModelAndView handle(ServletWebRequest webRequest, ModelAndViewContainer mavContainer, Object handler,
 			Exception ex) {
 		webRequest.getResponse().setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-		webRequest.getResponse().setHeader(HEADER_NAME_KEXIN_ERROR_CODE,
+		webRequest.getResponse().setHeader(HEADER_NAME_CRYSTAL_ERROR_CODE,
                 Integer.toString(GeneralError.Code.INTERNAL_SERVER_ERROR));
 
 		UnexpectedException ue = new UnexpectedException(ex);
@@ -136,7 +136,7 @@ public class RestApiHandlerExceptionResolver implements HandlerExceptionResolver
 			webRequest.getResponse().setStatus(HttpStatus.BAD_REQUEST.value());
 		}
 
-		webRequest.getResponse().setHeader(HEADER_NAME_KEXIN_ERROR_CODE, Integer.toString(e.getErrorCode()));
+		webRequest.getResponse().setHeader(HEADER_NAME_CRYSTAL_ERROR_CODE, Integer.toString(e.getErrorCode()));
 		Object returnValue = e.getData();
 
 		if (returnValue != null) {
