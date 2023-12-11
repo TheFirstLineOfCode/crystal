@@ -13,7 +13,7 @@
 	</parent>
 	
 	<groupId>com.thefirstlineofcode.crystal.plugins</groupId>
-	<artifactId>plugins-hsql-dba</artifactId>
+	<artifactId>crystal-plugins-hsql-dba</artifactId>
 	<name>Crystal HSQL DBA plugin</name>
 
 	<dependencies>

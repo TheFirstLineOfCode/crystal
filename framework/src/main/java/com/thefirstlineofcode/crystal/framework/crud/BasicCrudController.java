@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
-public abstract class BasicCrudController<T> implements IBasicCrudController<T>, ICrudHttpReqeustAdapterAware {
-	protected ICrudHttpRequestAdapter crudHttpRequestAdapter;
+public abstract class BasicCrudController<T> implements IBasicCrudController<T>, IHttpRequestAdapterAware {
+	protected IHttpRequestAdapter httpRequestAdapter;
 	
 	@GetMapping
 	public List<T> getList(@RequestHeader HttpHeaders httpHeaders,
 			@RequestParam Map<String, String> requestParameters) {
-		return doGetList(crudHttpRequestAdapter.getPageRequest(httpHeaders, requestParameters));
+		return doGetList(httpRequestAdapter.getPageRequest(httpHeaders, requestParameters));
 	}
 	
 	protected List<T> doGetList(PageRequest pageRequest) {
@@ -23,7 +23,7 @@ public abstract class BasicCrudController<T> implements IBasicCrudController<T>,
 	}
 	
 	@Override
-	public void setCrudHttpReqeustAdapter(ICrudHttpRequestAdapter crudHttpRequestAdapter) {
-		this.crudHttpRequestAdapter = crudHttpRequestAdapter;
+	public void setCrudHttpReqeustAdapter(IHttpRequestAdapter httpRequestAdapter) {
+		this.httpRequestAdapter = httpRequestAdapter;
 	}
 }

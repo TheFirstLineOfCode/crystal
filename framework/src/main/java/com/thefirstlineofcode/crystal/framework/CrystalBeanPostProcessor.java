@@ -8,6 +8,8 @@ import java.util.Properties;
 import java.util.Set;
 
 import org.pf4j.PluginWrapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.origin.OriginTrackedValue;
@@ -15,17 +17,19 @@ import org.springframework.boot.origin.OriginTrackedValue;
 import com.thefirstlineofcode.crystal.framework.config.ConfigurationProperties;
 import com.thefirstlineofcode.crystal.framework.config.IConfigurationProperties;
 import com.thefirstlineofcode.crystal.framework.config.IConfigurationPropertiesAware;
-import com.thefirstlineofcode.crystal.framework.crud.ICrudHttpReqeustAdapterAware;
-import com.thefirstlineofcode.crystal.framework.crud.ICrudHttpRequestAdapter;
+import com.thefirstlineofcode.crystal.framework.crud.IHttpRequestAdapterAware;
+import com.thefirstlineofcode.crystal.framework.crud.IHttpRequestAdapter;
 
 public class CrystalBeanPostProcessor implements BeanPostProcessor {
+	private static final Logger logger = LoggerFactory.getLogger(CrystalBeanPostProcessor.class);
+	
 	private static final String CRYSTAL_PLUGINS_PREFIX = "crystal.plugins";
 	
 	private Path applicationHome;
 	private Map<String, Object> applicationProperties;
 	private CrystalPluginManager pluginManager;
 	private Map<String, IConfigurationProperties> pluginIdToConfigurationProperties;
-	private ICrudHttpRequestAdapter crudHttpRequestAdapter;
+	private IHttpRequestAdapter crudHttpRequestAdapter;
 	
 	public CrystalBeanPostProcessor(Path applicationHome, Map<String, Object> applicationProperties, CrystalPluginManager pluginManager) {
 		this.applicationHome = applicationHome;
@@ -37,13 +41,15 @@ public class CrystalBeanPostProcessor implements BeanPostProcessor {
 		pluginIdToConfigurationProperties = new HashMap<>();
 	}
 	
-	private ICrudHttpRequestAdapter getCrudHttpRequestAdapter() {
-		List<ICrudHttpRequestAdapter> crudHttpRequestAdapters = pluginManager.getExtensions(ICrudHttpRequestAdapter.class);
-		if (crudHttpRequestAdapters == null || crudHttpRequestAdapters.size() == 0)
-			throw new RuntimeException("CRUD HTTP request adapter not found.");
+	private IHttpRequestAdapter getCrudHttpRequestAdapter() {
+		List<IHttpRequestAdapter> crudHttpRequestAdapters = pluginManager.getExtensions(IHttpRequestAdapter.class);
+		if (crudHttpRequestAdapters == null || crudHttpRequestAdapters.size() == 0) {
+			logger.error("Error: WEB request adapter not found.");
+			throw new RuntimeException("Error: WEB request adapter not found. You may need to configure a WEB request adapter plugin.");
+		}
 		
 		if (crudHttpRequestAdapters.size() != 1)
-			throw new RuntimeException("Multiple CRUD HTTP request adapters found.");
+			throw new RuntimeException("Multiple  WEB request adapters found. Something is wrong.");
 		
 		return crudHttpRequestAdapters.get(0);
 	}
@@ -66,8 +72,8 @@ public class CrystalBeanPostProcessor implements BeanPostProcessor {
 			((IConfigurationPropertiesAware)bean).setConfigurationProperties(getConfigurationProperties(plugin.getPluginId()));
 		}
 		
-		if (bean instanceof ICrudHttpReqeustAdapterAware) {
-			((ICrudHttpReqeustAdapterAware)bean).setCrudHttpReqeustAdapter(crudHttpRequestAdapter);
+		if (bean instanceof IHttpRequestAdapterAware) {
+			((IHttpRequestAdapterAware)bean).setCrudHttpReqeustAdapter(crudHttpRequestAdapter);
 		}
 		
 		return bean;

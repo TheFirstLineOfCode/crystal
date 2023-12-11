@@ -13,7 +13,7 @@
 	</parent>
 
 	<groupId>com.thefirstlineofcode.crystal.examples.plugins</groupId>
-	<artifactId>plugins-crud</artifactId>
+	<artifactId>examples-plugins-crud</artifactId>
 	<name>Crystal examples CRUD plugin</name>
 
 	<dependencies>

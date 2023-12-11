@@ -13,8 +13,8 @@
 	</parent>
 	
 	<groupId>com.thefirstlineofcode.crystal.plugins</groupId>
-	<artifactId>plugins-ra-data-woocommerce-adapter</artifactId>
-	<name>Crystal React-Admin data Woocommerce adapter plugin</name>
+	<artifactId>crystal-plugins-ra-data-woocommerce-http-request-adapter</artifactId>
+	<name>Crystal React-Admin data Woocommerce HTTP request adapter plugin</name>
 
 	<dependencies>
 		<dependency>

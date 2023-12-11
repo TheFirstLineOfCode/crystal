@@ -13,7 +13,7 @@
 	</parent>
 
 	<groupId>com.thefirstlineofcode.crystal.examples.plugins</groupId>
-	<artifactId>plugins-configuration-properties</artifactId>
+	<artifactId>examples-plugins-configuration-properties</artifactId>
 	<name>Crystal examples configuration properties plugin</name>
 
 	<dependencies>

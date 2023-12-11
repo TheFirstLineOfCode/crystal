@@ -13,7 +13,7 @@
 	</parent>
 	
 	<groupId>com.thefirstlineofcode.crystal.plugins</groupId>
-	<artifactId>plugins-auth</artifactId>
+	<artifactId>crystal-plugins-auth</artifactId>
 	<name>Crystal auth plugin</name>
 
 	<dependencies>

@@ -1,4 +1,4 @@
-package com.thefirstlineofcode.crystal.plugins.ra.data.woocommerce.adapter;
+package com.thefirstlineofcode.crystal.plugins.ra.data.woocommerce.http.request.adapter;
 
 import java.util.Map;
 
@@ -6,10 +6,10 @@ import org.pf4j.Extension;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
 
-import com.thefirstlineofcode.crystal.framework.crud.ICrudHttpRequestAdapter;
+import com.thefirstlineofcode.crystal.framework.crud.IHttpRequestAdapter;
 
 @Extension
-public class CrudHttpRequestAdapter implements ICrudHttpRequestAdapter {
+public class HttpRequestAdapter implements IHttpRequestAdapter {
 
 	@Override
 	public PageRequest getPageRequest(HttpHeaders httpHeaders, Map<String, String> requestParameters) {
