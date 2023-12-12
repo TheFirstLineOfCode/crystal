@@ -1,5 +1,6 @@
 package com.thefirstlineofcode.crystal.examples.plugins.crud;
 
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -13,10 +14,12 @@ public class User {
 	private long id;
 	private String name;
 	private String username;
-	/*private Address address;
+	@Embedded
+	private Address address;
 	private String phone;
 	private String website;
-	private Company company;*/
+	@Embedded
+	private Company company;
 	
 	public long getId() {
 		return id;
@@ -42,7 +45,7 @@ public class User {
 		this.username = username;
 	}
 	
-/*	public Address getAddress() {
+	public Address getAddress() {
 		return address;
 	}
 	
@@ -66,7 +69,7 @@ public class User {
 		this.website = website;
 	}
 	
-	public Company getCompany() {
+/*	public Company getCompany() {
 		return company;
 	}
 	

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
 public abstract class BasicCrudController<T> implements IBasicCrudController<T>, IHttpRequestAdapterAware {
-	protected IHttpRequestAdapter httpRequestAdapter;
+	protected IDataProtocolAdapter httpRequestAdapter;
 	
 	@GetMapping
 	public List<T> getList(@RequestHeader HttpHeaders httpHeaders,
@@ -23,7 +23,7 @@ public abstract class BasicCrudController<T> implements IBasicCrudController<T>,
 	}
 	
 	@Override
-	public void setCrudHttpReqeustAdapter(IHttpRequestAdapter httpRequestAdapter) {
+	public void setCrudHttpReqeustAdapter(IDataProtocolAdapter httpRequestAdapter) {
 		this.httpRequestAdapter = httpRequestAdapter;
 	}
 }

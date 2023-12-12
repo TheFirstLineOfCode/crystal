@@ -1,5 +1,8 @@
 package com.thefirstlineofcode.crystal.examples.plugins.crud;
 
+import javax.persistence.Embeddable;
+
+@Embeddable
 public class Geo {
 	private float lat;
 	private float lng;

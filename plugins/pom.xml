@@ -17,9 +17,9 @@
 	<name>Crystal plugins</name>
 	
 	<modules>
-		<module>hsql-dba</module>
+		<module>hsql-jpa-dba</module>
 		<module>auth</module>
-		<module>ra-data-woocommerce-http-request-adapter</module>
+		<module>ra-data-woocommerce-protocol-adapter</module>
 	</modules>
 </project>
 

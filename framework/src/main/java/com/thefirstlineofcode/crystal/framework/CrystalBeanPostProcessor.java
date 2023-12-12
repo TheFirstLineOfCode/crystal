@@ -18,7 +18,7 @@ import com.thefirstlineofcode.crystal.framework.config.ConfigurationProperties;
 import com.thefirstlineofcode.crystal.framework.config.IConfigurationProperties;
 import com.thefirstlineofcode.crystal.framework.config.IConfigurationPropertiesAware;
 import com.thefirstlineofcode.crystal.framework.crud.IHttpRequestAdapterAware;
-import com.thefirstlineofcode.crystal.framework.crud.IHttpRequestAdapter;
+import com.thefirstlineofcode.crystal.framework.crud.IDataProtocolAdapter;
 
 public class CrystalBeanPostProcessor implements BeanPostProcessor {
 	private static final Logger logger = LoggerFactory.getLogger(CrystalBeanPostProcessor.class);
@@ -29,7 +29,7 @@ public class CrystalBeanPostProcessor implements BeanPostProcessor {
 	private Map<String, Object> applicationProperties;
 	private CrystalPluginManager pluginManager;
 	private Map<String, IConfigurationProperties> pluginIdToConfigurationProperties;
-	private IHttpRequestAdapter crudHttpRequestAdapter;
+	private IDataProtocolAdapter crudHttpRequestAdapter;
 	
 	public CrystalBeanPostProcessor(Path applicationHome, Map<String, Object> applicationProperties, CrystalPluginManager pluginManager) {
 		this.applicationHome = applicationHome;
@@ -41,8 +41,8 @@ public class CrystalBeanPostProcessor implements BeanPostProcessor {
 		pluginIdToConfigurationProperties = new HashMap<>();
 	}
 	
-	private IHttpRequestAdapter getCrudHttpRequestAdapter() {
-		List<IHttpRequestAdapter> crudHttpRequestAdapters = pluginManager.getExtensions(IHttpRequestAdapter.class);
+	private IDataProtocolAdapter getCrudHttpRequestAdapter() {
+		List<IDataProtocolAdapter> crudHttpRequestAdapters = pluginManager.getExtensions(IDataProtocolAdapter.class);
 		if (crudHttpRequestAdapters == null || crudHttpRequestAdapters.size() == 0) {
 			logger.error("Error: WEB request adapter not found.");
 			throw new RuntimeException("Error: WEB request adapter not found. You may need to configure a WEB request adapter plugin.");

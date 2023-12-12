@@ -1,5 +1,5 @@
 package com.thefirstlineofcode.crystal.examples.plugins.crud;
 
-public interface IUsersService {
+import com.thefirstlineofcode.crystal.framework.crud.IBasicCrudService;
 
-}
+public interface IUsersService extends IBasicCrudService<User> {}

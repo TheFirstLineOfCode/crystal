@@ -1,6 +1,11 @@
 package com.thefirstlineofcode.crystal.examples.plugins.crud;
 
+import javax.persistence.Column;
+import javax.persistence.Embeddable;
+
+@Embeddable
 public class Company {
+	@Column(name = "company_name")
 	private String name;
 	private String catchPhrase;
 	private String bs;
