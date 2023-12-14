@@ -4,17 +4,20 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.Table;
 
 import com.thefirstlineofcode.crystal.framework.auth.IAccount;
 import com.thefirstlineofcode.crystal.framework.data.IIdProvider;
 
 @Entity
-@Table(name = "accounts")
-public class Account implements IIdProvider<Integer>, IAccount {
+@Table(name = "accounts",
+	indexes = @Index(name="INDEX_ACCOUNTS_NAME", columnList = "name")
+)
+public class Account implements IIdProvider<Long>, IAccount {
 	@Id
 	@GeneratedValue
-	private Integer id;
+	private Long id;
 	@Column(length = 32, nullable = false, unique = true)
 	private String name;
 	@Column(length = 16, nullable = false)
@@ -28,12 +31,12 @@ public class Account implements IIdProvider<Integer>, IAccount {
 	}	
 	
 	@Override
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	
 	@Override
-	public Integer getId() {
+	public Long getId() {
 		return id;
 	}
 	

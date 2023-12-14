@@ -1,31 +1,38 @@
 package com.thefirstlineofcode.crystal.examples.plugins.crud;
 
+import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.thefirstlineofcode.crystal.framework.data.IIdProvider;
+
 @Entity
 @Table(name="USERS")
-public class User {
+public class User implements IIdProvider<Long> {
 	@Id
 	@GeneratedValue
-	private long id;
+	private Long id;
+	@Column(length = 32, nullable = false, unique = true)
 	private String name;
+	@Column(length = 32, nullable = false)
 	private String username;
 	@Embedded
 	private Address address;
+	@Column(length = 16)
 	private String phone;
+	@Column(length = 64)
 	private String website;
 	@Embedded
 	private Company company;
 	
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 	
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	

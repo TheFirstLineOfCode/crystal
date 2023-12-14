@@ -1,10 +1,13 @@
 package com.thefirstlineofcode.crystal.examples.plugins.crud;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
 public class Geo {
+	@Column(name="address_geo_lat")
 	private float lat;
+	@Column(name="address_geo_lng")
 	private float lng;
 	
 	public float getLat() {

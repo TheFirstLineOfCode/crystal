@@ -5,9 +5,11 @@ import javax.persistence.Embeddable;
 
 @Embeddable
 public class Company {
-	@Column(name = "company_name")
+	@Column(name = "company_name", length = 64)
 	private String name;
+	@Column(name = "company_catch_phase", length = 128)
 	private String catchPhrase;
+	@Column(name = "company_bs", length = 64)
 	private String bs;
 	
 	public String getName() {

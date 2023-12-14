@@ -8,6 +8,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.hibernate.cfg.AvailableSettings;
 import org.pf4j.Extension;
 import org.springframework.beans.BeansException;
 import org.springframework.boot.autoconfigure.domain.EntityScanPackages;
@@ -19,6 +20,7 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -77,10 +79,24 @@ public class HSqlJpaDbaConfiguration implements ISpringConfiguration,
 		LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
 		entityManagerFactoryBean.setDataSource(dataSource);
 		entityManagerFactoryBean.setPackagesToScan(getEntityScanPackages());
-		entityManagerFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
+		entityManagerFactoryBean.setJpaVendorAdapter(getHibernateJpaVendorAdapter());
 		entityManagerFactoryBean.setJpaProperties(getJpaProperties());
 		
 		return entityManagerFactoryBean;
+	}
+
+	private HibernateJpaVendorAdapter getHibernateJpaVendorAdapter() {
+		HibernateJpaVendorAdapter hibernateJpaVendorAdapter = new HibernateJpaVendorAdapter();
+		hibernateJpaVendorAdapter.setDatabase(Database.HSQL);
+		hibernateJpaVendorAdapter.setGenerateDdl(true);
+		
+		hibernateJpaVendorAdapter.setShowSql(true);
+		/*hibernateJpaVendorAdapter.set(true);
+		hibernateJpaVendorAdapter.setShowSql(true);
+		hibernateJpaVendorAdapter.setShowSql(true);*/
+		
+		
+		return hibernateJpaVendorAdapter;
 	}
 	
 	private String[] getEntityScanPackages() {
@@ -99,11 +115,8 @@ public class HSqlJpaDbaConfiguration implements ISpringConfiguration,
 	Properties getJpaProperties() {
 		Properties properties = new Properties();
 		
-		properties.setProperty("spring.jpa.show-sql", "true");
-		properties.setProperty("spring.jpa.properties.hibernate.format_sql", "true");
-		properties.setProperty("spring.jpa.properties.hibernate.dialect", "org.hibernate.dialect.HSQLDialect");
-		properties.setProperty("spring.jpa.properties.hibernate.current_session_context_class", "thread");
-		properties.setProperty("spring.jpa.hibernate.ddl-auto", "update");		
+		properties.setProperty(AvailableSettings.FORMAT_SQL, "true");
+		properties.setProperty(AvailableSettings.CURRENT_SESSION_CONTEXT_CLASS, "thread");
 		
 		return properties;
 	}

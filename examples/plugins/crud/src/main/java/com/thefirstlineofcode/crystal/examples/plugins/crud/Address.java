@@ -1,13 +1,18 @@
 package com.thefirstlineofcode.crystal.examples.plugins.crud;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.Embedded;
 
 @Embeddable
 public class Address {
+	@Column(name="address_street", length = 64)
 	private String street;
-	private String suite;
-	private String city;
+	@Column(name="address_suite", length = 32)
+	private String suite;	
+	@Column(name="address_city", length = 32)
+	private String city;	
+	@Column(name="address_zipcode", length = 16)
 	private String zipcode;
 	@Embedded
 	private Geo geo;

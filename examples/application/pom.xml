@@ -11,7 +11,7 @@
 	</parent>	
 	
 	<groupId>com.thefirstlineofcode.crystal.examples</groupId>
-	<artifactId>examples-application</artifactId>
+	<artifactId>crystal-examples-application</artifactId>
 	<name>Crystal examples application</name>
 	
 	<properties>
