@@ -1,4 +1,4 @@
-package com.thefirstlineofcode.crystal.examples.plugins.crud;
+package com.thefirstlineofcode.crystal.examples.plugins.data.accessor;
 
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;

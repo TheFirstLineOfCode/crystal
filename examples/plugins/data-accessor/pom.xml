@@ -13,17 +13,13 @@
 	</parent>
 
 	<groupId>com.thefirstlineofcode.crystal.examples.plugins</groupId>
-	<artifactId>crystal-examples-plugins-crud</artifactId>
-	<name>Crystal examples CRUD plugin</name>
+	<artifactId>crystal-examples-plugins-data-accessor</artifactId>
+	<name>Crystal examples data accessor plugin</name>
 
 	<dependencies>
 		<dependency>
 			<groupId>com.thefirstlineofcode.crystal</groupId>
 			<artifactId>crystal-framework</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.thefirstlineofcode.crystal.examples.plugins</groupId>
-			<artifactId>crystal-examples-plugins-data-accessor</artifactId>
 		</dependency>
 	</dependencies>
 </project>

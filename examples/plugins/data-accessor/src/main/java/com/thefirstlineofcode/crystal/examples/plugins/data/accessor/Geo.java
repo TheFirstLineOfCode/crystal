@@ -1,4 +1,4 @@
-package com.thefirstlineofcode.crystal.examples.plugins.crud;
+package com.thefirstlineofcode.crystal.examples.plugins.data.accessor;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;

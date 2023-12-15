@@ -18,7 +18,7 @@ public class CrystalPluginClassLoader extends PluginClassLoader {
 	private static final Logger log = LoggerFactory.getLogger(CrystalPluginClassLoader.class);
 	
 	public CrystalPluginClassLoader(PluginManager pluginManager, PluginDescriptor pluginDescriptor, ClassLoader parent) {
-		super(pluginManager, pluginDescriptor, parent, ClassLoadingStrategy.PDA);
+		super(pluginManager, pluginDescriptor, parent, ClassLoadingStrategy.APD);
 	}
 	
 	public CrystalPluginClassLoader(PluginManager pluginManager, PluginDescriptor pluginDescriptor, ClassLoader parent,

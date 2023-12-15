@@ -13,8 +13,8 @@
 	</parent>
 
 	<groupId>com.thefirstlineofcode.crystal.examples.plugins</groupId>
-	<artifactId>crystal-examples-plugins-crud</artifactId>
-	<name>Crystal examples CRUD plugin</name>
+	<artifactId>crystal-examples-plugins-initial-test-data</artifactId>
+	<name>Crystal examples initial test data plugin</name>
 
 	<dependencies>
 		<dependency>

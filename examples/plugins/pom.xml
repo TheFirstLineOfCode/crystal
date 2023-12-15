@@ -17,6 +17,8 @@
 	
 	<modules>
 		<module>configuration-properties</module>
+		<module>data-accessor</module>
+		<module>initial-test-data</module>
 		<module>crud</module>
 	</modules>
 </project>
