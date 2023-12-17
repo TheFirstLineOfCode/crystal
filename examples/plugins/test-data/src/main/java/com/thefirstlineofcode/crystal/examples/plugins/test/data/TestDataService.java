@@ -1,4 +1,4 @@
-package com.thefirstlineofcode.crystal.examples.plugins.initial.test.data;
+package com.thefirstlineofcode.crystal.examples.plugins.test.data;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import com.thefirstlineofcode.crystal.examples.plugins.data.accessor.UserRepository;
 
 @Service
-public class InitialTestDataService implements IInitialTestDataService {
+public class TestDataService implements ITestDataService {
 	@Autowired
 	private UserRepository userRepository;
 

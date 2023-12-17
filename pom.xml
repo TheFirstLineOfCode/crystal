@@ -149,6 +149,11 @@
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>com.thefirstlineofcode.crystal.plugins</groupId>
+				<artifactId>crystal-plugins-react-admin</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>com.thefirstlineofcode.crystal.examples.plugins</groupId>
 				<artifactId>crystal-examples-plugins-data-accessor</artifactId>
 				<version>${project.version}</version>

@@ -9,13 +9,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
-public abstract class BasicCrudController<T> implements IBasicCrudController<T>, IHttpRequestAdapterAware {
-	protected IDataProtocolAdapter httpRequestAdapter;
+import com.thefirstlineofcode.crystal.framework.data.IDataProtocolAdapter;
+
+public abstract class BasicCrudController<T> implements IBasicCrudController<T>, IDataProtocolAdapterAware {
+	protected IDataProtocolAdapter dataProtocolAdapter;
 	
 	@GetMapping
 	public List<T> getList(@RequestHeader HttpHeaders httpHeaders,
 			@RequestParam Map<String, String> requestParameters) {
-		return doGetList(httpRequestAdapter.getPageRequest(httpHeaders, requestParameters));
+		return doGetList(dataProtocolAdapter.getPageRequest(httpHeaders, requestParameters));
 	}
 	
 	protected List<T> doGetList(PageRequest pageRequest) {
@@ -23,7 +25,7 @@ public abstract class BasicCrudController<T> implements IBasicCrudController<T>,
 	}
 	
 	@Override
-	public void setCrudHttpReqeustAdapter(IDataProtocolAdapter httpRequestAdapter) {
-		this.httpRequestAdapter = httpRequestAdapter;
+	public void setDataProtocolAdapter(IDataProtocolAdapter dataProtocolAdapter) {
+		this.dataProtocolAdapter = dataProtocolAdapter;
 	}
 }

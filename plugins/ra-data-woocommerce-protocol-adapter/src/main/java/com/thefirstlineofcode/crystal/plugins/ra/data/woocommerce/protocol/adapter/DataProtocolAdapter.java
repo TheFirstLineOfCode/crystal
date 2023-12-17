@@ -6,7 +6,7 @@ import org.pf4j.Extension;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
 
-import com.thefirstlineofcode.crystal.framework.crud.IDataProtocolAdapter;
+import com.thefirstlineofcode.crystal.framework.data.IDataProtocolAdapter;
 
 @Extension
 public class DataProtocolAdapter implements IDataProtocolAdapter {

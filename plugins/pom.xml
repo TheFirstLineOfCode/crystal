@@ -20,6 +20,7 @@
 		<module>hsql-jpa-dba</module>
 		<module>auth</module>
 		<module>ra-data-woocommerce-protocol-adapter</module>
+		<module>react-admin</module>
 	</modules>
 </project>
 

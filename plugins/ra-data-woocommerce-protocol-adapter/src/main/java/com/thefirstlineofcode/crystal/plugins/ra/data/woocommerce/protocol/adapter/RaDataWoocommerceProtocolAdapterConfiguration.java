@@ -20,7 +20,7 @@ import com.thefirstlineofcode.crystal.framework.ISpringConfiguration;
 
 @Extension
 @Configuration
-public class RaDataWoocommerceHttpRequestAdapterConfiguration implements ISpringConfiguration {
+public class RaDataWoocommerceProtocolAdapterConfiguration implements ISpringConfiguration {
 	@Bean
 	public FilterRegistrationBean<WoocommerceContextPathAdjustmentFilter> loggingFilter(){
 	    FilterRegistrationBean<WoocommerceContextPathAdjustmentFilter> registrationBean 

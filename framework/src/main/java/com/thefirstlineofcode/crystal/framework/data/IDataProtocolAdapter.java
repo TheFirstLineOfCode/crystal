@@ -1,4 +1,4 @@
-package com.thefirstlineofcode.crystal.framework.crud;
+package com.thefirstlineofcode.crystal.framework.data;
 
 import java.util.Map;
 

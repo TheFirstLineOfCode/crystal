@@ -13,13 +13,13 @@
 	</parent>
 
 	<groupId>com.thefirstlineofcode.crystal.examples.plugins</groupId>
-	<artifactId>crystal-examples-plugins-initial-test-data</artifactId>
-	<name>Crystal examples initial test data plugin</name>
+	<artifactId>crystal-examples-plugins-test-data</artifactId>
+	<name>Crystal examples test data plugin</name>
 
 	<dependencies>
 		<dependency>
-			<groupId>com.thefirstlineofcode.crystal</groupId>
-			<artifactId>crystal-framework</artifactId>
+			<groupId>com.thefirstlineofcode.crystal.plugins</groupId>
+			<artifactId>crystal-plugins-react-admin</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.thefirstlineofcode.crystal.examples.plugins</groupId>
