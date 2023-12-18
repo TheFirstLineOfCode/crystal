@@ -1,4 +1,4 @@
-package com.thefirstlineofcode.crystal.plugins.ra.data.woocommerce.protocol.adapter;
+package com.thefirstlineofcode.crystal.plugins.react.admin;
 
 import java.util.Map;
 

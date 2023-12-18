@@ -1,4 +1,4 @@
-package com.thefirstlineofcode.crystal.plugins.ra.data.woocommerce.protocol.adapter;
+package com.thefirstlineofcode.crystal.plugins.react.admin;
 
 import java.io.IOException;
 
@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequestWrapper;
 import org.pf4j.Extension;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.util.WebUtils;
 
@@ -20,7 +21,8 @@ import com.thefirstlineofcode.crystal.framework.ISpringConfiguration;
 
 @Extension
 @Configuration
-public class RaDataWoocommerceProtocolAdapterConfiguration implements ISpringConfiguration {
+@ComponentScan
+public class ReactAdminConfiguration implements ISpringConfiguration {
 	@Bean
 	public FilterRegistrationBean<WoocommerceContextPathAdjustmentFilter> loggingFilter(){
 	    FilterRegistrationBean<WoocommerceContextPathAdjustmentFilter> registrationBean 
