@@ -8,16 +8,15 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Repeatable(RepeatableMenus.class)
-public @interface Menu {
+@Repeatable(RepeatableStructuralMenus.class)
+public @interface StructuralMenu {
 	public static final int PRIORITY_HIGH = 2000;
 	public static final int PRIORITY_MEDIUM = 1000;
 	public static final int PRIORITY_LOW = 200;
 	
-	String parent() default "";
-	boolean leaf() default true;
-	String name() default "";
+	String name();
 	String label() default "";
 	String icon() default "";
+	String parent() default "";
 	int priority() default PRIORITY_MEDIUM;
 }

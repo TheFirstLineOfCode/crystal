@@ -5,8 +5,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Target(ElementType.TYPE)
+@Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface RepeatableMenus {
-	Menu[] value();
+public @interface CrudView {
+	String name();
+	String listComponentName() default "";
+	String createComponentName() default "";
+	String editComponentName() default "";
+	ViewMenu menu();
 }

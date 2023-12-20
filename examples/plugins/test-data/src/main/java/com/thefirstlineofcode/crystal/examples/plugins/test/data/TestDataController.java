@@ -8,12 +8,12 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
 import com.thefirstlineofcode.crystal.framework.ui.CustomView;
-import com.thefirstlineofcode.crystal.framework.ui.Menu;
+import com.thefirstlineofcode.crystal.framework.ui.ViewMenu;
 import com.thefirstlineofcode.crystal.plugins.react.admin.RaCustomController;
 
 @RestController
 @RequestMapping("/test-data")
-@CustomView(name = "system_test-data", viewComponentName = "TestDataPage", menu = @Menu(parent = "system", label = "menu_name_system_test-data"))
+@CustomView(name = "test-data", componentName = "TestDataPage", menu = @ViewMenu(parent = "tools", label = "menu_name_test-data"))
 public class TestDataController extends RaCustomController<ModelAndView> {
 	@Autowired
 	private TestDataService testDataService;

@@ -1,6 +1,7 @@
 package com.thefirstlineofcode.crystal.plugins.react.admin;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import org.pf4j.PluginManager;
@@ -15,14 +16,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.thefirstlineofcode.crystal.framework.IPluginManagerAware;
 import com.thefirstlineofcode.crystal.framework.ISpringConfiguration;
-import com.thefirstlineofcode.crystal.framework.ui.CrudViews;
+import com.thefirstlineofcode.crystal.framework.ui.CrudView;
 import com.thefirstlineofcode.crystal.framework.ui.CustomView;
-import com.thefirstlineofcode.crystal.framework.ui.Menu;
+import com.thefirstlineofcode.crystal.framework.ui.StructuralMenu;
+import com.thefirstlineofcode.crystal.framework.ui.ViewMenu;
 
 @RestController
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class UiConfigurationController implements IPluginManagerAware, ApplicationContextAware, InitializingBean {
-	private List<CrudViews> crudViewses;
+	private List<CrudView> crudViews;
 	private List<CustomView> customViews;
 	private List<Menu> menus;
 	
@@ -34,23 +36,121 @@ public class UiConfigurationController implements IPluginManagerAware, Applicati
 	}
 
 	private List<Resource> generateResources() {
-		// TODO Auto-generated method stub
-		return null;
+		return generateResources(getMenuAndViews(null));
 	}
 
+	private List<Resource> generateResources(List<MenuAndView> menuAndViews) {
+		List<Resource> resources = new ArrayList<>();
+		
+		for (MenuAndView menuAndView : menuAndViews) {
+			resources.add(getResource(menuAndView));
+		}
+		
+		return resources;
+	}
+
+	private Resource getResource(MenuAndView menuAndView) {
+		Menu menu = menuAndView.menu;
+		Resource resource = new Resource(menu.name, menu.label, !menu.leaf, "".equals(menu.parent) ? null : menu.parent);
+		
+		if (menuAndView.view == null) {
+			// NOOP
+		} else if (menuAndView.view instanceof CrudView) {
+			CrudView crudView = (CrudView)menuAndView.view;
+			resource.setListComponentName(getNullableComponentName(crudView.listComponentName()));
+			resource.setCreateComponentName(getNullableComponentName(crudView.createComponentName()));
+			resource.setEditComponentName(getNullableComponentName(crudView.editComponentName()));
+		} else if (menuAndView.view instanceof CustomView) {
+			CustomView customView = (CustomView)menuAndView.view;
+			resource.setListComponentName(customView.componentName());
+		} else {
+			throw new RuntimeException(String.format("Error: Unknown type of view. View class: '%s'.", menuAndView.view.getClass()));
+		}
+		
+		return resource;
+	}
+
+	private String getNullableComponentName(String componentName) {
+		return "".equals(componentName) ? null : componentName;
+	}
+
+	private List<MenuAndView> getMenuAndViews(MenuAndView parent) {
+		List<MenuAndView> children = findChildren(parent);
+		
+		List<MenuAndView> descendants = new ArrayList<MenuAndView>();
+		for (int i = 0; i < children.size(); i++) {
+			MenuAndView child = children.get(i);
+			descendants.add(child);
+			if (!child.menu.leaf)
+				descendants.addAll(findChildren(child));
+		}
+		
+		return descendants;
+	}
+
+	private List<MenuAndView> findChildren(MenuAndView parent) {
+		String parentMenuName = parent == null ? "" : parent.menu.name;
+		
+		List<MenuAndView> children = new ArrayList<>();
+		for (Menu menu : menus) {
+			if (parentMenuName.equals(menu.parent))
+				children.add(new MenuAndView(menu));
+		}
+		
+		for (CrudView crudView : crudViews) {
+			if (parentMenuName.equals(crudView.menu().parent()))
+				children.add(new MenuAndView(getMenu(crudView.name(), crudView.menu()), crudView));
+		}
+		
+		for (CustomView customView : customViews) {
+			if (parentMenuName.equals(customView.menu().parent()))
+				children.add(new MenuAndView(getMenu(customView.name(), customView.menu()), customView));
+		}
+		
+		children.sort(new Comparator<MenuAndView>() {
+			@Override
+			public int compare(MenuAndView menuAndView1, MenuAndView menuAndView2) {
+				return menuAndView2.menu.priority - menuAndView1.menu.priority;
+			}
+		});
+		
+		return children;
+	}
+
+	private Menu getMenu(String viewName, ViewMenu viewMenu) {
+		return new Menu(viewName, 
+				viewMenu.label() != null ? viewMenu.label() : viewName,
+				"".equals(viewMenu.parent()) ? null : viewMenu.parent(),
+				true, viewMenu.priority());
+	}
+	
+	private class MenuAndView {
+		public Menu menu;
+		public Object view;
+		
+		public MenuAndView(Menu menu) {
+			this(menu, null);
+		}
+		
+		public MenuAndView(Menu menu, Object view) {
+			this.menu = menu;
+			this.view = view;
+		}
+	}
+	
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		crudViewses = new ArrayList<>();
+		crudViews = new ArrayList<>();
 		customViews = new ArrayList<>();
 		
 		String[] restControllerBeanNames = applicationContext.getBeanNamesForAnnotation(RestController.class);
 		for (String restControllerBeanName : restControllerBeanNames) {
 			Class<?> restControllerClass = applicationContext.getType(restControllerBeanName);
 			
-			CrudViews[] someCrudViewses = restControllerClass.getAnnotationsByType(CrudViews.class);
-			if (someCrudViewses != null && someCrudViewses.length > 0) {
-				for (CrudViews crudViews : someCrudViewses) {
-					crudViewses.add(crudViews);
+			CrudView[] someCrudViews = restControllerClass.getAnnotationsByType(CrudView.class);
+			if (someCrudViews != null && someCrudViews.length > 0) {
+				for (CrudView crudView : someCrudViews) {
+					crudViews.add(crudView);
 				}
 			}
 			
@@ -74,17 +174,39 @@ public class UiConfigurationController implements IPluginManagerAware, Applicati
 		}
 		
 		for (Class<?> contributedSpringConfigurationClass : contributedSpringConfigurationClasses) {
-			Menu[] someMenus = contributedSpringConfigurationClass.getAnnotationsByType(Menu.class);
+			StructuralMenu[] someMenus = contributedSpringConfigurationClass.getAnnotationsByType(StructuralMenu.class);
 			
-			for (Menu menu : someMenus) {
-				menus.add(menu);
+			for (StructuralMenu menu : someMenus) {
+				menus.add(getMenu(menu));
 			}
 		}
+	}
+
+	private Menu getMenu(StructuralMenu menu) {
+		return new Menu(menu.name(),
+				menu.label() != null ? menu.label() : menu.name(),
+				menu.parent(), false, menu.priority());
 	}
 
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		uiConfiguration = new UiConfiguration();
 		uiConfiguration.setResources(generateResources());
+	}
+	
+	private class Menu {
+		public String name;
+		public String label;
+		public String parent;
+		public boolean leaf;
+		public int priority;
+		
+		public Menu(String name, String label, String parent, boolean leaf, int priority) {
+			this.name = name;
+			this.label = label;
+			this.parent = parent;
+			this.leaf = leaf;
+			this.priority = priority;
+		}
 	}
 }

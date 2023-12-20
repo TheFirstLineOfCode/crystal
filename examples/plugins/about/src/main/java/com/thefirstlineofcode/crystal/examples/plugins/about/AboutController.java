@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.thefirstlineofcode.crystal.framework.config.IConfigurationProperties;
 import com.thefirstlineofcode.crystal.framework.config.IConfigurationPropertiesAware;
 import com.thefirstlineofcode.crystal.framework.ui.CustomView;
-import com.thefirstlineofcode.crystal.framework.ui.Menu;
+import com.thefirstlineofcode.crystal.framework.ui.ViewMenu;
 
 @RestController
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-@CustomView(name = "system_about", viewComponentName = "AboutPage",
-	menu = @Menu(parent = "system", label = "menu_name_system_about", priority = Menu.PRIORITY_LOW))
+@CustomView(name = "about", componentName = "AboutPage",
+	menu = @ViewMenu(parent = "system", label = "menu_name_about", priority = ViewMenu.PRIORITY_LOW))
 public class AboutController implements IConfigurationPropertiesAware {
 	private About about;
 	
