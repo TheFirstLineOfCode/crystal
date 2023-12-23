@@ -20,6 +20,7 @@ import org.springframework.boot.ConfigurableBootstrapContext;
 import org.springframework.boot.DefaultApplicationArguments;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.SpringApplicationRunListener;
+import org.springframework.boot.origin.OriginTrackedValue;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigRegistry;
 import org.springframework.core.env.ConfigurableEnvironment;
@@ -202,7 +203,7 @@ public class ApplicationListener implements SpringApplicationRunListener {
 		if (applicationProperties == null)
 			return;
 		
-		String sDisabledPlugins = (String)applicationProperties.get(PROPERTY_NAME_CRYSTAL_APPLICATION_DISABLED_PLUGINS);
+		String sDisabledPlugins = getPropertyValue(PROPERTY_NAME_CRYSTAL_APPLICATION_DISABLED_PLUGINS);
 		if (sDisabledPlugins == null) {			
 			disabledPlugins = new String[0];
 		} else {			
@@ -212,8 +213,16 @@ public class ApplicationListener implements SpringApplicationRunListener {
 			}
 		}
 		
-		String logLevel = (String)applicationProperties.get(PROPERTY_NAME_CRYSTAL_APPLICATION_LOG_LEVEL);
+		String logLevel = getPropertyValue(PROPERTY_NAME_CRYSTAL_APPLICATION_LOG_LEVEL);
 		configureLog(logLevel);
+	}
+
+	private String getPropertyValue(String key) {
+		OriginTrackedValue value = (OriginTrackedValue)applicationProperties.get(key);
+		if (value == null)
+			return null;
+		
+		return (String)value.getValue();
 	}
 	
 	private void configureLog(String logLevel) {

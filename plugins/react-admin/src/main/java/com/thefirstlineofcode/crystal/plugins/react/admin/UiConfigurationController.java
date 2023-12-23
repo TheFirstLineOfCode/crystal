@@ -77,15 +77,32 @@ public class UiConfigurationController implements IPluginManagerAware, Applicati
 	private List<MenuAndView> getMenuAndViews(MenuAndView parent) {
 		List<MenuAndView> children = findChildren(parent);
 		
-		List<MenuAndView> descendants = new ArrayList<MenuAndView>();
+		
+		List<MenuAndView> allMenuAndViews = new ArrayList<>();
 		for (int i = 0; i < children.size(); i++) {
 			MenuAndView child = children.get(i);
-			descendants.add(child);
-			if (!child.menu.leaf)
-				descendants.addAll(findChildren(child));
+			
+			if (child.menu.leaf) {
+				allMenuAndViews.add(child);
+			} else {
+				List<MenuAndView> descendants = findDescendants(child);
+				if (!noLeafMenu(descendants)) {
+					allMenuAndViews.add(child);
+					allMenuAndViews.addAll(descendants);
+				}				
+			}
 		}
 		
-		return descendants;
+		return allMenuAndViews;
+	}
+
+	private boolean noLeafMenu(List<MenuAndView> descendants) {
+		for (MenuAndView descendant : descendants) {
+			if (descendant.menu.leaf)
+				return false;
+		}
+		
+		return true;
 	}
 
 	private List<MenuAndView> findChildren(MenuAndView parent) {
@@ -115,6 +132,19 @@ public class UiConfigurationController implements IPluginManagerAware, Applicati
 		});
 		
 		return children;
+	}
+	
+	private List<MenuAndView> findDescendants(MenuAndView ancestor) {
+		List<MenuAndView> descendants = new ArrayList<>();
+		
+		List<MenuAndView> children = findChildren(ancestor);
+		for (int i = 0; i < children.size(); i++) {
+			MenuAndView child = children.get(i);
+			descendants.add(child);
+			descendants.addAll(findDescendants(child));
+		}
+		
+		return descendants;
 	}
 
 	private Menu getMenu(String viewName, ViewMenu viewMenu) {
@@ -207,6 +237,21 @@ public class UiConfigurationController implements IPluginManagerAware, Applicati
 			this.parent = parent;
 			this.leaf = leaf;
 			this.priority = priority;
+		}
+		
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof Menu))
+				return false;
+			
+			Menu other = (Menu)obj;
+			if (name != other.name)
+				return false;
+			
+			if (parent == null)
+				return other.parent == null;
+			
+			return parent.equals(other.parent);
 		}
 	}
 }

@@ -9,7 +9,7 @@ import com.thefirstlineofcode.crystal.examples.plugins.data.accessor.UserReposit
 import com.thefirstlineofcode.crystal.framework.crud.jpa.BasicCrudService;
 
 @Service
-public class UserService extends BasicCrudService<User, Long> implements IUserService {
+public class UserService2 extends BasicCrudService<User, Long> implements IUserService {
 	@Autowired
 	private UserRepository userRepository;
 	
