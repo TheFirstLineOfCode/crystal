@@ -9,9 +9,9 @@ public class Resource {
 	private String label;
 	private boolean parentMenu;
 	private String menuParent;
-	private String listComponentName;
-	private String createComponentName;
-	private String editComponentName;
+	private String listViewName;
+	private String createViewName;
+	private String editViewName;
 	
 	public Resource(String name, String label, boolean parentMenu, String menuParent) {
 		this.name = name;
@@ -52,27 +52,27 @@ public class Resource {
 		this.menuParent = menuParent;
 	}
 
-	public String getListComponentName() {
-		return listComponentName;
+	public String getListViewName() {
+		return listViewName;
 	}
 
-	public void setListComponentName(String listComponentName) {
-		this.listComponentName = listComponentName;
+	public void setListViewName(String listViewName) {
+		this.listViewName = listViewName;
 	}
 
-	public String getCreateComponentName() {
-		return createComponentName;
+	public String getCreateViewName() {
+		return createViewName;
 	}
 
-	public void setCreateComponentName(String createComponentName) {
-		this.createComponentName = createComponentName;
+	public void setCreateViewName(String createViewName) {
+		this.createViewName = createViewName;
 	}
 
-	public String getEditComponentName() {
-		return editComponentName;
+	public String getEditViewName() {
+		return editViewName;
 	}
 
-	public void setEditComponentName(String editComponentName) {
-		this.editComponentName = editComponentName;
+	public void setEditViewName(String editViewName) {
+		this.editViewName = editViewName;
 	}
 }

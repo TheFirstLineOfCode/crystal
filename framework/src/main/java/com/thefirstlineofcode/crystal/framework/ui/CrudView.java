@@ -9,8 +9,8 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CrudView {
 	String name();
-	String listComponentName() default "";
-	String createComponentName() default "";
-	String editComponentName() default "";
+	String listViewName() default "";
+	String createViewName() default "";
+	String editViewName() default "";
 	ViewMenu menu();
 }

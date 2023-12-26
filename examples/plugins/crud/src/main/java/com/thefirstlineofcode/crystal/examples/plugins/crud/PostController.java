@@ -12,7 +12,7 @@ import com.thefirstlineofcode.crystal.framework.ui.ViewMenu;
 
 @RestController
 @RequestMapping("/posts")
-@CrudView(name = "posts", menu = @ViewMenu(label = "menu_name_posts", priority = ViewMenu.PRIORITY_MEDIUM + 400))
+@CrudView(name = "posts", menu = @ViewMenu(label = "ca.menu.posts", priority = ViewMenu.PRIORITY_MEDIUM + 400))
 public class PostController extends BasicCrudController<Post> {
 	@Autowired
 	private PostService postService;

@@ -57,12 +57,12 @@ public class UiConfigurationController implements IPluginManagerAware, Applicati
 			// NOOP
 		} else if (menuAndView.view instanceof CrudView) {
 			CrudView crudView = (CrudView)menuAndView.view;
-			resource.setListComponentName(getNullableComponentName(crudView.listComponentName()));
-			resource.setCreateComponentName(getNullableComponentName(crudView.createComponentName()));
-			resource.setEditComponentName(getNullableComponentName(crudView.editComponentName()));
+			resource.setListViewName(getNullableComponentName(crudView.listViewName()));
+			resource.setCreateViewName(getNullableComponentName(crudView.createViewName()));
+			resource.setEditViewName(getNullableComponentName(crudView.editViewName()));
 		} else if (menuAndView.view instanceof CustomView) {
 			CustomView customView = (CustomView)menuAndView.view;
-			resource.setListComponentName(customView.componentName());
+			resource.setListViewName(customView.viewName());
 		} else {
 			throw new RuntimeException(String.format("Error: Unknown type of view. View class: '%s'.", menuAndView.view.getClass()));
 		}

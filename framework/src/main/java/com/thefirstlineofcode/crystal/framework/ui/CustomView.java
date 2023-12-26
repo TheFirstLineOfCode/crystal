@@ -9,6 +9,6 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CustomView {
 	String name();
-	String componentName();
+	String viewName();
 	ViewMenu menu();
 }

@@ -13,7 +13,7 @@ import com.thefirstlineofcode.crystal.plugins.react.admin.RaCustomController;
 
 @RestController
 @RequestMapping("/test-data")
-@CustomView(name = "test-data", componentName = "TestDataPage", menu = @ViewMenu(parent = "tools", label = "menu_name_test-data"))
+@CustomView(name = "test-data", viewName = "TestDataView", menu = @ViewMenu(parent = "tools", label = "ca.menu.testData"))
 public class TestDataController extends RaCustomController<ModelAndView> {
 	@Autowired
 	private TestDataService testDataService;

@@ -9,6 +9,25 @@ import {
 import {dataProvider} from "./dataProvider";
 import woocommerceDataProvider from "ra-data-woocommerce";
 import {TreeMenu} from "@bb-tech/ra-components"
+import polyglotI18nProvider from 'ra-i18n-polyglot'
+import en from './ca-language-english';
+import cn from './ca-language-chinese';
+import chineseMessages from './ca-language-chinese'
+
+const i18nProvider = polyglotI18nProvider(
+	locale => {
+		if (locale === 'en') {
+			return import('./ca-language-english').then(messages => messages.default);
+		}
+		
+		return chineseMessages;
+	},
+	'cn',
+	[
+		{ locale: 'cn', name: '中文' },
+		{ locale: 'en', name: 'English' }
+	]
+);
 
 async function fetchUiConfiguration(url, options = {}) {
 	if (!options.headers) {
@@ -30,7 +49,7 @@ async function getResources(serviceUrl, options = {}) {
 	return resources;
 }
 
-export async function fetchCrystalConfiguration(serviceUrl, options = {}) {
+export async function fetchAdminConfiguration(serviceUrl, options = {}) {
 	const resources = await getResources(serviceUrl, options);
 	const configuration = {
 		"serviceUrl": serviceUrl,
@@ -40,7 +59,7 @@ export async function fetchCrystalConfiguration(serviceUrl, options = {}) {
 	return configuration;
 }
 
-function getResourceConfigurations(resources, applicationPages) {
+function getResourceConfigurations(resources, applicationViews) {
 	const resourceConfigurations = new Array();
 	let index = 0;
 	resources.map(resource => {
@@ -55,13 +74,11 @@ function getResourceConfigurations(resources, applicationPages) {
 		if (resource.parentMenu) {
 			options['isMenuParent'] = true;
 		} else {
-			if (resource.listComponentName !== undefined) {
-				listComponent = applicationPages.get(resource.listComponentName);
+			if (resource.listViewName !== undefined) {
+				listComponent = applicationViews.get(resource.listViewName);
 			} else {
 				listComponent = ListGuesser;
 			}
-			
-			console.log("List Component: ", listComponent);
 		}
 		
 		const resourceConfiguration = {
@@ -76,15 +93,15 @@ function getResourceConfigurations(resources, applicationPages) {
 	return resourceConfigurations;
 }
 
-export const CrystalApp = ({configuration, applicationPages}) => {
+export const CrystalAdmin = ({configuration, applicationViews}) => {
 	/*const dataProvider = woocommerceDataProvider({
 		woocommerceUrl: configuration.serviceUrl
 	});*/
 	
-	const resourceConfigurations = getResourceConfigurations(configuration.resources, applicationPages);
+	const resourceConfigurations = getResourceConfigurations(configuration.resources, applicationViews);
 	
 	return (
-		<Admin layout={CrystalLayout} dataProvider={dataProvider}>
+		<Admin layout={CrystalLayout} dataProvider={dataProvider} i18nProvider={i18nProvider}>
 			{
 				resourceConfigurations.map(resourceConfiguration => (	
 					<Resource key={resourceConfiguration.name} name={resourceConfiguration.name} options={resourceConfiguration.options} list={resourceConfiguration.list} />
