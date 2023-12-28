@@ -10,6 +10,11 @@ const englishMessages: TranslationMessages = {
 			help: 'Help',
 			about: 'About'
 		}
+	},
+	ra: {
+		page: {
+			list: '%{name}'
+		}
 	}
 };
 

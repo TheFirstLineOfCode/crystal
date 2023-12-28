@@ -1,3 +1,8 @@
+import Button from '@mui/material/Button';
+import {fetchUtils} from 'react-admin';
+import {getServiceUrl} from './crystalAdmin'
+import {AboutView} from './aboutView'
+
 export function getApplicationViews() {
 	const applicationViews = new Map([
 		['TestDataView', TestDataView],
@@ -13,8 +18,3 @@ const TestDataView = () => {
 	);
 }
 
-const AboutView = () => {
-	return (
-		<h4>Hello, about view!</h4>
-	);
-}

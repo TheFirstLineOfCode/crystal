@@ -6,7 +6,8 @@ import {
   ShowGuesser,
   Layout
 } from "react-admin";
-import {dataProvider} from "./dataProvider";
+
+// import {dataProvider} from "./dataProvider";
 import woocommerceDataProvider from "ra-data-woocommerce";
 import {TreeMenu} from "@bb-tech/ra-components"
 import polyglotI18nProvider from 'ra-i18n-polyglot'
@@ -26,7 +27,8 @@ const i18nProvider = polyglotI18nProvider(
 	[
 		{ locale: 'cn', name: '中文' },
 		{ locale: 'en', name: 'English' }
-	]
+	],
+	{allowMissing: true}
 );
 
 async function fetchUiConfiguration(url, options = {}) {
@@ -51,12 +53,18 @@ async function getResources(serviceUrl, options = {}) {
 
 export async function fetchAdminConfiguration(serviceUrl, options = {}) {
 	const resources = await getResources(serviceUrl, options);
+	
+	window.serviceUrl = serviceUrl;
 	const configuration = {
 		"serviceUrl": serviceUrl,
 		"resources": resources
 	};
 	
 	return configuration;
+}
+
+export function getServiceUrl() {
+	return window.serviceUrl;
 }
 
 function getResourceConfigurations(resources, applicationViews) {
@@ -94,10 +102,9 @@ function getResourceConfigurations(resources, applicationViews) {
 }
 
 export const CrystalAdmin = ({configuration, applicationViews}) => {
-	/*const dataProvider = woocommerceDataProvider({
+	const dataProvider = woocommerceDataProvider({
 		woocommerceUrl: configuration.serviceUrl
-	});*/
-	
+	});
 	const resourceConfigurations = getResourceConfigurations(configuration.resources, applicationViews);
 	
 	return (

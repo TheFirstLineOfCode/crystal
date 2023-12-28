@@ -10,6 +10,11 @@ const chineseMessages: TranslationMessages = {
 			help: '帮助',
 			about: '关于'
 		}
+	},
+	ra: {
+		page: {
+			list: '%{name}'
+		}
 	}
 };
 
