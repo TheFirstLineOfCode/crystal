@@ -5,12 +5,18 @@ import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.Table;
 
 import com.thefirstlineofcode.crystal.framework.data.IIdProvider;
 
 @Entity
-@Table(name="USERS")
+@Table(name = "USERS",
+	indexes = {
+			@Index(name = "INDEX_USERS_NAME", columnList = "name"),
+			@Index(name = "INDEX_USERS_USERNAME", columnList = "username")
+	}
+)
 public class User implements IIdProvider<Long> {
 	@Id
 	@GeneratedValue

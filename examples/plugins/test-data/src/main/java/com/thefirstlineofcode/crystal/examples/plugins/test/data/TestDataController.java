@@ -26,7 +26,7 @@ public class TestDataController extends RaCustomController<ModelAndView> {
 	@GetMapping("/total-users")
 	public ModelAndView getTotalUsers() {
 		ModelAndView modelAndView = new ModelAndView(new MappingJackson2JsonView());
-		modelAndView.addObject("total-users", testDataService.getTotalUsers());
+		modelAndView.addObject("total_users", testDataService.getTotalUsers());
 		
 		return modelAndView;
 	}

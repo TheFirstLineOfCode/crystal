@@ -15,6 +15,18 @@ const chineseMessages: TranslationMessages = {
 		page: {
 			list: '%{name}'
 		}
+	},
+	AboutView: {
+		about: '关于',
+		applicationName: '应用名',
+		version: '版本',
+		developer: '开发者',
+		close: '关闭'
+	},
+	TestDataView: {
+		totalUsers: '总用户数',
+		loadTestData: '装载测试数据',
+		clearTestData: '清除测试数据'
 	}
 };
 

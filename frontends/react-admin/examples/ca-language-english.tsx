@@ -15,6 +15,18 @@ const englishMessages: TranslationMessages = {
 		page: {
 			list: '%{name}'
 		}
+	},
+	AboutView: {
+		about: 'About',
+		applicationName: 'Application Name',
+		version: 'Version',
+		developer: 'Developer',
+		close: 'CLOSE'
+	},
+	TestDataView: {
+		totalUsers: 'Total Users',
+		loadTestData: 'Load Test Data',
+		clearTestData: 'Clear Test Data'
 	}
 };
 

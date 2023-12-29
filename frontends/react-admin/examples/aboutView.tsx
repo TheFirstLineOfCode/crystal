@@ -5,17 +5,10 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import {fetchUtils} from 'react-admin'
+import {fetchUtils, useTranslate} from 'react-admin'
 
-export const AboutView = () => {
-	const [showDialog, setShowDialog] = useState(false);
-	const openDialog = () => {
-		setShowDialog(true);
-	};
-	const closeDialog = () => {
-		setShowDialog(false);
-	};
-	
+const AboutDialog = ({showDialog, onClose}) => {
+	const translate = useTranslate();
 	const [about, setAbout] = useState({
 		applicationName: "Unknown application",
 		version: "Unknown version",
@@ -29,32 +22,49 @@ export const AboutView = () => {
 	});
 	
 	return (
+		<Dialog open={showDialog} 
+			aria-labelledby="alert-dialog-title"
+			aria-describedby="alert-dialog-description">
+			<DialogTitle id="alert-dialog-title">
+				{translate('AboutView.about')}
+			</DialogTitle>
+			<DialogContent>
+				<DialogContentText id="alert-dialog-description">
+					<strong>{translate('AboutView.applicationName')}:</strong>{about.applicationName}
+					<br/>
+					<strong>{translate('AboutView.version')}:</strong> {about.version}
+					<br/>
+					<strong>{translate('AboutView.developer')}:</strong> {about.developer}
+				</DialogContentText>
+			</DialogContent>
+			<DialogActions>
+				<Button onClick={onClose}>{translate('AboutView.close')}</Button>
+			</DialogActions>
+		</Dialog>	
+	)
+}
+
+export const AboutView = () => {
+	const translate = useTranslate();
+	const [showDialog, setShowDialog] = useState(false);
+	
+	const openDialog = () => {
+		setShowDialog(true);
+	};
+	
+	const closeDialog = () => {
+		setShowDialog(false);
+	};
+	
+	return (
 		<>
 			<Button variant="outlined" size="medium"
 					sx= {{width: 128, padding: 1, margin: 2}}
 						onClick={openDialog}>
-				About
+				{translate('AboutView.about')}
 			</Button>
 			
-			<Dialog open={showDialog} onClose={closeDialog} 
-				aria-labelledby="alert-dialog-title"
-				aria-describedby="alert-dialog-description">
-				<DialogTitle id="alert-dialog-title">
-					{"About"}
-				</DialogTitle>
-				<DialogContent>
-					<DialogContentText id="alert-dialog-description">
-						<strong>Application Name:</strong>{about.applicationName}
-						<br/>
-						<strong>Version:</strong> {about.version}
-						<br/>
-						<strong>Developer:</strong> {about.developer}
-					</DialogContentText>
-				</DialogContent>
-				<DialogActions>
-					<Button onClick={closeDialog}>CLOSE</Button>
-				</DialogActions>
-			</Dialog>
+			<AboutDialog showDialog={showDialog} onClose={closeDialog} />
 		</>
 	)
 }
