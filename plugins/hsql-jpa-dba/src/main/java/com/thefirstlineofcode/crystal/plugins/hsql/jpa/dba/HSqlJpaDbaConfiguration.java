@@ -89,12 +89,7 @@ public class HSqlJpaDbaConfiguration implements ISpringConfiguration,
 		HibernateJpaVendorAdapter hibernateJpaVendorAdapter = new HibernateJpaVendorAdapter();
 		hibernateJpaVendorAdapter.setDatabase(Database.HSQL);
 		hibernateJpaVendorAdapter.setGenerateDdl(true);
-		
 		hibernateJpaVendorAdapter.setShowSql(true);
-		/*hibernateJpaVendorAdapter.set(true);
-		hibernateJpaVendorAdapter.setShowSql(true);
-		hibernateJpaVendorAdapter.setShowSql(true);*/
-		
 		
 		return hibernateJpaVendorAdapter;
 	}
@@ -117,32 +112,10 @@ public class HSqlJpaDbaConfiguration implements ISpringConfiguration,
 		
 		properties.setProperty(AvailableSettings.FORMAT_SQL, "true");
 		properties.setProperty(AvailableSettings.CURRENT_SESSION_CONTEXT_CLASS, "thread");
+		properties.setProperty(AvailableSettings.HBM2DDL_DATABASE_ACTION, "update");
 		
 		return properties;
 	}
-	
-/*	@Bean
-	public DataSourceInitializer dataSourceInitializer(DataSource dataSource) {
-		ResourceDatabasePopulator resourceDatabasePopulator = new ResourceDatabasePopulator();
-		
-		List<IDataContributor> dataContributors = appComponentService.getPluginManager().getExtensions(IDataContributor.class);
-		for (IDataContributor dataContributor : dataContributors) {
-			URL[] initScripts = dataContributor.getInitScripts();
-			if (initScripts == null || initScripts.length == 0)
-				continue;
-			
-			for (URL initScript : initScripts) {
-				resourceDatabasePopulator.addScript(new UrlResource(initScript));			
-			}
-		}
-		resourceDatabasePopulator.setContinueOnError(true);
-		
-		DataSourceInitializer dataSourceInitializer = new DataSourceInitializer();
-		dataSourceInitializer.setDataSource(dataSource);
-		dataSourceInitializer.setDatabasePopulator(resourceDatabasePopulator);
-		
-		return dataSourceInitializer;
-	}*/
 	
 	@Override
 	public void setConfigurationProperties(IConfigurationProperties properties) {

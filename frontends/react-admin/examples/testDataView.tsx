@@ -1,35 +1,79 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import Button from '@mui/material/Button';
 import {fetchUtils, useTranslate} from 'react-admin'
+import {useDataProvider} from 'react-admin';
+
+const TOTALS_NOT_FETCHED = -1;
+const TOTALS_FETCHED = -2;
+const FAILED_TO_FETCH_TOTALS = -3;
+const FAILED_TO_LOAD_TEST_DATA = -4;
+const FAILED_TO_CLEAR_TEST_DATA = -5;
+const LOADING_TEST_DATA = -6;
+const CLEARING_TEST_DATA = -7;
 
 export const TestDataView = () => {
 	const translate = useTranslate();
-	const [totalUsers, setTotalUsers] = useState(-1);
+	const [state, setState] = useState(TOTALS_NOT_FETCHED);
+	const [totalUsers, setTotalUsers] = useState(TOTALS_NOT_FETCHED);
+	const [totalPosts, setTotalPosts] = useState(TOTALS_NOT_FETCHED);
+	const dataProvider = useDataProvider();
 	
-	const fetchTotalUsers = () => {
-		fetchUtils.fetchJson(`${serviceUrl}/test-data/total-users`).
+	const fetchTotals = () => {
+		fetchUtils.fetchJson(`${serviceUrl}/test-data/totals`).
 			then(({json}) => {
+				setState(TOTALS_FETCHED);
 				setTotalUsers(json.total_users);
+				setTotalPosts(json.total_posts);
 			}).catch(error => {
-				setTotalUsers(-1);
-				console.log('HTTP call failed. Error message:', error)
+				setState(FAILED_TO_FETCH_TOTALS);
+				console.log('HTTP call failed. Error message: ', error)
 			});
 	}
 	
 	const loadTestData = () => {
-		alert("Loading data.");
+		if (!window.confirm("Are you sure to load test data?"))
+			return;
+		
+		setState(LOADING_TEST_DATA);
+		
+		dataProvider.loadTestData().then(({data}) => {
+			setState(TOTALS_FETCHED);
+			setTotalUsers(data.total_users);
+			setTotalPosts(data.total_posts);
+		}).catch(error => {
+			console.log("Error occurred.", error);
+			setState(FAILED_TO_LOAD_TEST_DATA);
+		});
 	}
 	
 	const clearTestData = () => {
-		alert("Clearing test data.");
+		if (!window.confirm("Are you sure to clear test data?"))
+			return;
+		
+		setState(CLEARING_TEST_DATA);
+		
+		dataProvider.clearTestData().then(({data}) => {
+			setState(TOTALS_FETCHED);
+			setTotalUsers(data.total_users);
+			setTotalPosts(data.total_posts);
+		}).catch(error => {
+			console.log("Error occurred.", error);
+			setState(FAILED_TO_CLEAR_TEST_DATA);
+		});
 	}
 	
-	fetchTotalUsers();
+	useEffect(() => {
+		if (state == TOTALS_NOT_FETCHED) {
+			fetchTotals();
+		}
+	}, [state]);
 	
-	if (totalUsers == -1) {
+	if (state == TOTALS_NOT_FETCHED) {
 		return (
 			<>
-				<strong>{translate('TestDataView.totalUsers')}: {totalUsers}.</strong>
+				<strong>{translate('TestDataView.totalUsers')}: ?.</strong>
+				<br />
+				<strong>{translate('TestDataView.totalPosts')}: ?.</strong>
 				<Button variant="contained" size="medium"
 						sx= {{width: 256, padding: 1, margin: 2}}
 							disabled>
@@ -37,10 +81,43 @@ export const TestDataView = () => {
 				</Button>
 			</>
 		);
-	} else if (totalUsers == 0) {
+	} else if (state == FAILED_TO_FETCH_TOTALS) {
+		return (<strong>Error. Failed to fetch totals.</strong>);
+	} else if (state == FAILED_TO_LOAD_TEST_DATA) {
+		return (<strong>Error. Failed to load test data.</strong>);
+	} else if (state == FAILED_TO_CLEAR_TEST_DATA) {
+		return (<strong>Error. Failed to clear test data.</strong>);
+	} else if (state == LOADING_TEST_DATA) {
+		return (
+			<>
+				<strong>{translate('TestDataView.totalUsers')}: ?.</strong>
+				<br />
+				<strong>{translate('TestDataView.totalPosts')}: ?.</strong>
+				<Button variant="contained" size="medium"
+						sx= {{width: 256, padding: 1, margin: 2}}
+							disabled>
+					{translate('TestDataView.loadingTestData')}
+				</Button>
+			</>
+		);
+	} else if (state == CLEARING_TEST_DATA) {
+		return (
+			<>
+				<strong>{translate('TestDataView.totalUsers')}: ?.</strong>
+				<br />
+				<strong>{translate('TestDataView.totalPosts')}: ?.</strong>
+				<Button variant="contained" size="medium"
+						sx= {{width: 256, padding: 1, margin: 2}}
+							disabled>
+					{translate('TestDataView.clearingTestData')}
+				</Button>
+			</>
+		);
+	} else if (TOTALS_FETCHED && totalUsers == 0 && totalPosts == 0) {
 		return (
 			<>
 				<strong>{translate('TestDataView.totalUsers')}: {totalUsers}.</strong>
+				<strong>{translate('TestDataView.totalPosts')}: {totalPosts}.</strong>
 				<Button variant="contained" size="medium"
 						sx= {{width: 256, padding: 1, margin: 2}}
 							onClick={loadTestData}>
@@ -52,6 +129,7 @@ export const TestDataView = () => {
 		return (
 			<>
 				<strong>{translate('TestDataView.totalUsers')}: {totalUsers}.</strong>
+				<strong>{translate('TestDataView.totalPosts')}: {totalPosts}.</strong>
 				<Button variant="contained" size="medium"
 						sx= {{width: 256, padding: 1, margin: 2}}
 							onClick={clearTestData}>

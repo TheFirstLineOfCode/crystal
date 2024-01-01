@@ -24,9 +24,9 @@ public class Post implements IIdProvider<Long> {
 	@Column(nullable = false)
 	private Long userId;
 	
-	@Column(length = 32, nullable = false)
-	private String title;
 	@Column(length = 512, nullable = false)
+	private String title;
+	@Column(length = 2048, nullable = false)
 	private String body;
 	
 	public Long getId() {

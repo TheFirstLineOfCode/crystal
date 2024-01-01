@@ -25,9 +25,11 @@ public class User implements IIdProvider<Long> {
 	private String name;
 	@Column(length = 32, nullable = false)
 	private String username;
+	@Column(length = 128, nullable = false)
+	private String email;
 	@Embedded
 	private Address address;
-	@Column(length = 16)
+	@Column(length = 32)
 	private String phone;
 	@Column(length = 64)
 	private String website;
@@ -58,6 +60,14 @@ public class User implements IIdProvider<Long> {
 		this.username = username;
 	}
 	
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	public Address getAddress() {
 		return address;
 	}
@@ -82,11 +92,11 @@ public class User implements IIdProvider<Long> {
 		this.website = website;
 	}
 	
-/*	public Company getCompany() {
+	public Company getCompany() {
 		return company;
 	}
 	
 	public void setCompany(Company company) {
 		this.company = company;
-	}*/
+	}
 }

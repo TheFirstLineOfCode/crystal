@@ -25,8 +25,11 @@ const chineseMessages: TranslationMessages = {
 	},
 	TestDataView: {
 		totalUsers: '总用户数',
+		totalPosts: '总贴子数',
 		loadTestData: '装载测试数据',
-		clearTestData: '清除测试数据'
+		clearTestData: '清除测试数据',
+		loadingTestData: '装载中....',
+		cleaningTestData: '清除中....'
 	}
 };
 

@@ -25,8 +25,11 @@ const englishMessages: TranslationMessages = {
 	},
 	TestDataView: {
 		totalUsers: 'Total Users',
+		totalPosts: 'Total Posts',
 		loadTestData: 'Load Test Data',
-		clearTestData: 'Clear Test Data'
+		clearTestData: 'Clear Test Data',
+		loadingTestData: 'Loading....',
+		cleaningTestData: 'Clearing....'
 	}
 };
 

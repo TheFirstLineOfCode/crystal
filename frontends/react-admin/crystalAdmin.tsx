@@ -4,7 +4,8 @@ import {
   ListGuesser,
   EditGuesser,
   ShowGuesser,
-  Layout
+  Layout,
+  fetchUtils
 } from "react-admin";
 
 // import {dataProvider} from "./dataProvider";
@@ -53,18 +54,29 @@ async function getResources(serviceUrl, options = {}) {
 
 export async function fetchAdminConfiguration(serviceUrl, options = {}) {
 	const resources = await getResources(serviceUrl, options);
+	const httpClient = (url, options = {}) => {
+		if (!options.headers) {
+			options.headers = new Headers({Accept: 'application/json'});
+		}
+		
+		return fetchUtils.fetchJson(url, options);
+    }
+	
+	window.httpClient = httpClient;
+	
+	const dataProvider = woocommerceDataProvider({
+		woocommerceUrl: serviceUrl,
+		httpClient: httpClient
+	});
 	
 	window.serviceUrl = serviceUrl;
 	const configuration = {
 		"serviceUrl": serviceUrl,
-		"resources": resources
+		"resources": resources,
+		"dataProvider": dataProvider
 	};
 	
 	return configuration;
-}
-
-export function getServiceUrl() {
-	return window.serviceUrl;
 }
 
 function getResourceConfigurations(resources, applicationViews) {
@@ -102,13 +114,10 @@ function getResourceConfigurations(resources, applicationViews) {
 }
 
 export const CrystalAdmin = ({configuration, applicationViews}) => {
-	const dataProvider = woocommerceDataProvider({
-		woocommerceUrl: configuration.serviceUrl
-	});
 	const resourceConfigurations = getResourceConfigurations(configuration.resources, applicationViews);
 	
 	return (
-		<Admin layout={CrystalLayout} dataProvider={dataProvider} i18nProvider={i18nProvider}>
+		<Admin layout={CrystalLayout} dataProvider={configuration.dataProvider} i18nProvider={i18nProvider}>
 			{
 				resourceConfigurations.map(resourceConfiguration => (	
 					<Resource key={resourceConfiguration.name} name={resourceConfiguration.name} options={resourceConfiguration.options} list={resourceConfiguration.list} />
