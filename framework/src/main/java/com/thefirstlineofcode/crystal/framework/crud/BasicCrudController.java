@@ -3,6 +3,8 @@ package com.thefirstlineofcode.crystal.framework.crud;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,8 +18,15 @@ public abstract class BasicCrudController<T> implements IBasicCrudController<T>,
 	
 	@GetMapping
 	public List<T> getList(@RequestHeader HttpHeaders httpHeaders,
-			@RequestParam Map<String, String> requestParameters) {
-		return doGetList(dataProtocolAdapter.getPageRequest(httpHeaders, requestParameters));
+			@RequestParam Map<String, String> requestParameters,
+				HttpServletResponse response) {
+		PageRequest pageRequest = dataProtocolAdapter.getPageRequest(httpHeaders, requestParameters);
+		
+		List<T> list = doGetList(pageRequest);
+		
+		dataProtocolAdapter.prepareResponse(response, pageRequest, getService());
+		
+		return list;
 	}
 	
 	protected List<T> doGetList(PageRequest pageRequest) {

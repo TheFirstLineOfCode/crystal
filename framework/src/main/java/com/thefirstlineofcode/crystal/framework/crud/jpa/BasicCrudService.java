@@ -15,9 +15,13 @@ public abstract class BasicCrudService<T, ID> implements IBasicCrudService<T> {
 		return getRepository().findAll(getPageableFromPageRequest(pageRequest)).toList();
 	}
 	
+	@Override
+	public long getTotal() {
+		return getRepository().count();
+	}
+	
 	protected Pageable getPageableFromPageRequest(PageRequest pageRequest) {
-		// TODO Auto-generated method stub
-		return null;
+		return pageRequest;
 	}
 	
 	protected abstract PagingAndSortingRepository<T, ID> getRepository();

@@ -6,4 +6,5 @@ import org.springframework.data.domain.PageRequest;
 
 public interface IBasicCrudService<T> {
 	List<T> getList(PageRequest pageRequest);
+	long getTotal();
 }
