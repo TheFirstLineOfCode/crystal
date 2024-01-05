@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import Button from '@mui/material/Button';
-import {fetchUtils, useTranslate} from 'react-admin'
+import {fetchUtils, useTranslate, Title} from 'react-admin'
 import {useDataProvider} from 'react-admin';
 
 const TOTALS_NOT_FETCHED = -1;
@@ -71,6 +71,7 @@ export const TestDataView = () => {
 	if (state == TOTALS_NOT_FETCHED) {
 		return (
 			<>
+				<Title title="ca.title.testData" />
 				<strong>{translate('TestDataView.totalUsers')}: ?.</strong>
 				<br />
 				<strong>{translate('TestDataView.totalPosts')}: ?.</strong>
@@ -90,6 +91,7 @@ export const TestDataView = () => {
 	} else if (state == LOADING_TEST_DATA) {
 		return (
 			<>
+				<Title title="ca.title.testData" />
 				<strong>{translate('TestDataView.totalUsers')}: ?.</strong>
 				<br />
 				<strong>{translate('TestDataView.totalPosts')}: ?.</strong>
@@ -103,6 +105,7 @@ export const TestDataView = () => {
 	} else if (state == CLEARING_TEST_DATA) {
 		return (
 			<>
+				<Title title="ca.title.testData" />
 				<strong>{translate('TestDataView.totalUsers')}: ?.</strong>
 				<br />
 				<strong>{translate('TestDataView.totalPosts')}: ?.</strong>
@@ -116,6 +119,7 @@ export const TestDataView = () => {
 	} else if (TOTALS_FETCHED && totalUsers == 0 && totalPosts == 0) {
 		return (
 			<>
+				<Title title="ca.title.testData" />
 				<strong>{translate('TestDataView.totalUsers')}: {totalUsers}.</strong>
 				<strong>{translate('TestDataView.totalPosts')}: {totalPosts}.</strong>
 				<Button variant="contained" size="medium"
@@ -128,6 +132,7 @@ export const TestDataView = () => {
 	} else {
 		return (
 			<>
+				<Title title="ca.title.testData" />
 				<strong>{translate('TestDataView.totalUsers')}: {totalUsers}.</strong>
 				<strong>{translate('TestDataView.totalPosts')}: {totalPosts}.</strong>
 				<Button variant="contained" size="medium"
@@ -138,6 +143,4 @@ export const TestDataView = () => {
 			</>
 		);
 	}
-	
-
 }

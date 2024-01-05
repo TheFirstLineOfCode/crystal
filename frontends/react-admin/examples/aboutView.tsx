@@ -1,25 +1,30 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import {fetchUtils, useTranslate} from 'react-admin'
+import {fetchUtils, useTranslate, Title} from 'react-admin'
 
 const AboutDialog = ({showDialog, onClose}) => {
 	const translate = useTranslate();
+	
 	const [about, setAbout] = useState({
 		applicationName: "Unknown application",
 		version: "Unknown version",
 		developer: "Unknown"
 	});
 	
-	fetchUtils.fetchJson(`${serviceUrl}/about`).then(({json}) => {
-		setAbout(json);
-	}).catch(error => {
-		console.log('HTTP call failed. Error message:', error)
-	});
+	useEffect(() => {
+		if (showDialog) {
+			fetchUtils.fetchJson(`${serviceUrl}/about`).then(({json}) => {
+				setAbout(json);
+			}).catch(error => {
+				console.log('HTTP call failed. Error message:', error)
+			});	
+		}
+	}, [showDialog]);
 	
 	return (
 		<Dialog open={showDialog} 
@@ -48,23 +53,16 @@ export const AboutView = () => {
 	const translate = useTranslate();
 	const [showDialog, setShowDialog] = useState(false);
 	
-	const openDialog = () => {
-		setShowDialog(true);
-	};
-	
-	const closeDialog = () => {
-		setShowDialog(false);
-	};
-	
 	return (
 		<>
+			<Title title="ca.title.about" />
 			<Button variant="outlined" size="medium"
 					sx= {{width: 128, padding: 1, margin: 2}}
-						onClick={openDialog}>
+						onClick={() => {setShowDialog(true);}}>
 				{translate('AboutView.about')}
 			</Button>
 			
-			<AboutDialog showDialog={showDialog} onClose={closeDialog} />
+			<AboutDialog showDialog={showDialog} onClose={() => {setShowDialog(false);}} />
 		</>
 	)
 }

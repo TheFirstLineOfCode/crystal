@@ -3,6 +3,7 @@ import {fetchUtils} from 'react-admin';
 import {getServiceUrl} from './crystalAdmin'
 import {AboutView} from './aboutView'
 import {TestDataView} from './testDataView'
+import {UserListView} from './userListView'
 
 export function customizeDataProvider(dataProvider) {
 	dataProvider.loadTestData = function() {
@@ -27,7 +28,8 @@ export function customizeDataProvider(dataProvider) {
 export function getApplicationViews() {
 	const applicationViews = new Map([
 		['TestDataView', TestDataView],
-		['AboutView', AboutView]
+		['AboutView', AboutView],
+		['UserListView', UserListView],
 	]);
 	
 	return applicationViews;

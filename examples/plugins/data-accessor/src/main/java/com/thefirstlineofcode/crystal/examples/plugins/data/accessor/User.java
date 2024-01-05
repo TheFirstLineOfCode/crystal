@@ -3,7 +3,6 @@ package com.thefirstlineofcode.crystal.examples.plugins.data.accessor;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.Table;
@@ -19,7 +18,6 @@ import com.thefirstlineofcode.crystal.framework.data.IIdProvider;
 )
 public class User implements IIdProvider<Long> {
 	@Id
-	@GeneratedValue
 	private Long id;
 	@Column(length = 32, nullable = false, unique = true)
 	private String name;

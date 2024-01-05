@@ -13,7 +13,7 @@ import com.thefirstlineofcode.crystal.framework.ui.ViewMenu;
 @RestController
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 @CustomView(name = "about", viewName = "AboutView",
-	menu = @ViewMenu(parent = "help", label = "ca.menu.about", priority = ViewMenu.PRIORITY_LOW))
+	menu = @ViewMenu(parent = "help", label = "ca.title.about", priority = ViewMenu.PRIORITY_LOW))
 public class AboutController implements IConfigurationPropertiesAware {
 	private About about;
 	

@@ -1,19 +1,18 @@
 import {TranslationMessages} from 'ra-core';
+import chineseMessages from 'ra-language-chinese';
 
-const chineseMessages: TranslationMessages = {
+export default {
+	...chineseMessages,
 	ca: {
 		menu: {
+			tools: '工具',
+			help: '帮助'			
+		},
+		title: {
 			users: '用户',
 			posts: '帖子',
-			tools: '工具',
 			testData: '测试数据',
-			help: '帮助',
 			about: '关于'
-		}
-	},
-	ra: {
-		page: {
-			list: '%{name}'
 		}
 	},
 	AboutView: {
@@ -31,6 +30,4 @@ const chineseMessages: TranslationMessages = {
 		loadingTestData: '装载中....',
 		cleaningTestData: '清除中....'
 	}
-};
-
-export default chineseMessages;
+}

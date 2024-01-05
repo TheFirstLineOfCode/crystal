@@ -1,19 +1,18 @@
 import {TranslationMessages} from 'ra-core';
+import englishMessages from 'ra-language-english';
 
-const englishMessages: TranslationMessages = {
+export default {
+	...englishMessages,
 	ca: {
 		menu: {
+			tools: 'Tools',
+			help: 'Help'
+		},
+		title: {
 			users: 'Users',
 			posts: 'Posts',
-			tools: 'Tools',
 			testData: 'Test Data',
-			help: 'Help',
 			about: 'About'
-		}
-	},
-	ra: {
-		page: {
-			list: '%{name}'
 		}
 	},
 	AboutView: {
@@ -31,6 +30,4 @@ const englishMessages: TranslationMessages = {
 		loadingTestData: 'Loading....',
 		cleaningTestData: 'Clearing....'
 	}
-};
-
-export default englishMessages;
+}

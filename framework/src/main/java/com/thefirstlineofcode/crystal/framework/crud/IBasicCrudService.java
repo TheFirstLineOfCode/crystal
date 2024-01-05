@@ -2,9 +2,9 @@ package com.thefirstlineofcode.crystal.framework.crud;
 
 import java.util.List;
 
-import org.springframework.data.domain.PageRequest;
+import com.thefirstlineofcode.crystal.framework.data.QueryParams;
 
 public interface IBasicCrudService<T> {
-	List<T> getList(PageRequest pageRequest);
-	long getTotal();
+	List<T> getList(QueryParams queryParams);
+	long getTotal(QueryParams queryParams);
 }

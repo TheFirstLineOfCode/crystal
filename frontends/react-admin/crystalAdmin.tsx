@@ -8,8 +8,7 @@ import {
   fetchUtils
 } from "react-admin";
 
-// import {dataProvider} from "./dataProvider";
-import woocommerceDataProvider from "ra-data-woocommerce";
+import simpleRestProvider from "ra-data-simple-rest";
 import {TreeMenu} from "@bb-tech/ra-components"
 import polyglotI18nProvider from 'ra-i18n-polyglot'
 import en from './ca-language-english';
@@ -64,14 +63,10 @@ export async function fetchAdminConfiguration(serviceUrl, options = {}) {
 	
 	window.httpClient = httpClient;
 	
-	const dataProvider = woocommerceDataProvider({
-		woocommerceUrl: serviceUrl,
-		httpClient: httpClient
-	});
+	const dataProvider = simpleRestProvider(serviceUrl, httpClient);
 	
 	window.serviceUrl = serviceUrl;
 	const configuration = {
-		"serviceUrl": serviceUrl,
 		"resources": resources,
 		"dataProvider": dataProvider
 	};

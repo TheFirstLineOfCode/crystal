@@ -2,7 +2,6 @@ package com.thefirstlineofcode.crystal.examples.plugins.data.accessor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.Table;
@@ -18,7 +17,6 @@ import com.thefirstlineofcode.crystal.framework.data.IIdProvider;
 )
 public class Post implements IIdProvider<Long> {
 	@Id
-	@GeneratedValue
 	private Long id;
 	
 	@Column(nullable = false)

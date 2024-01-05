@@ -14,7 +14,7 @@ import com.thefirstlineofcode.crystal.framework.ui.ViewMenu;
 
 @RestController
 @RequestMapping("/test-data")
-@CustomView(name = "test-data", viewName = "TestDataView", menu = @ViewMenu(parent = "tools", label = "ca.menu.testData"))
+@CustomView(name = "test-data", viewName = "TestDataView", menu = @ViewMenu(parent = "tools", label = "ca.title.testData"))
 public class TestDataController {
 	@Autowired
 	private ITestDataService testDataService;
