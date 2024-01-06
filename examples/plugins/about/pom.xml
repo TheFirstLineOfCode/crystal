@@ -18,8 +18,8 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.thefirstlineofcode.crystal.plugins</groupId>
-			<artifactId>crystal-plugins-react-admin</artifactId>
+			<groupId>com.thefirstlineofcode.crystal</groupId>
+			<artifactId>crystal-framework</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.thefirstlineofcode.crystal.examples.plugins</groupId>

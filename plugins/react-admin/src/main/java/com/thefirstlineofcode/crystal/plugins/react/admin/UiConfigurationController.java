@@ -16,15 +16,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.thefirstlineofcode.crystal.framework.IPluginManagerAware;
 import com.thefirstlineofcode.crystal.framework.ISpringConfiguration;
-import com.thefirstlineofcode.crystal.framework.ui.CrudView;
-import com.thefirstlineofcode.crystal.framework.ui.CustomView;
+import com.thefirstlineofcode.crystal.framework.ui.BootMenu;
 import com.thefirstlineofcode.crystal.framework.ui.StructuralMenu;
-import com.thefirstlineofcode.crystal.framework.ui.ViewMenu;
+import com.thefirstlineofcode.crystal.framework.ui.reactadmin.CustomView;
+import com.thefirstlineofcode.crystal.framework.ui.reactadmin.Resource;
 
 @RestController
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class UiConfigurationController implements IPluginManagerAware, ApplicationContextAware, InitializingBean {
-	private List<CrudView> crudViews;
+	private List<Resource> resources;
 	private List<CustomView> customViews;
 	private List<Menu> menus;
 	
@@ -35,69 +35,74 @@ public class UiConfigurationController implements IPluginManagerAware, Applicati
 		return uiConfiguration;
 	}
 
-	private List<Resource> generateResources() {
-		return generateResources(getMenuAndViews(null));
+	private List<TreeMenuSupportedResource> generateTreeMenuSupportedResources() {
+		return generateTreeMenuSupportedResources(getMenuAndElements(null));
 	}
 
-	private List<Resource> generateResources(List<MenuAndView> menuAndViews) {
-		List<Resource> resources = new ArrayList<>();
+	private List<TreeMenuSupportedResource> generateTreeMenuSupportedResources(List<MenuAndElement> menuAndElements) {
+		List<TreeMenuSupportedResource> treeMenuSupportedResources = new ArrayList<>();
 		
-		for (MenuAndView menuAndView : menuAndViews) {
-			resources.add(getResource(menuAndView));
+		for (MenuAndElement menuAndElement : menuAndElements) {
+			treeMenuSupportedResources.add(getTreeMenuSupportedResource(menuAndElement));
 		}
 		
-		return resources;
+		return treeMenuSupportedResources;
 	}
 
-	private Resource getResource(MenuAndView menuAndView) {
-		Menu menu = menuAndView.menu;
-		Resource resource = new Resource(menu.name, menu.label, !menu.leaf, "".equals(menu.parent) ? null : menu.parent);
+	private TreeMenuSupportedResource getTreeMenuSupportedResource(MenuAndElement menuAndElement) {
+		Menu menu = menuAndElement.menu;
+		TreeMenuSupportedResource treeMenuSupportedResource = new TreeMenuSupportedResource(menu.name, menu.label, !menu.leaf, "".equals(menu.parent) ? null : menu.parent);
 		
-		if (menuAndView.view == null) {
+		if (menuAndElement.element == null) {
 			// NOOP
-		} else if (menuAndView.view instanceof CrudView) {
-			CrudView crudView = (CrudView)menuAndView.view;
-			resource.setListViewName(getNullableComponentName(crudView.listViewName()));
-			resource.setCreateViewName(getNullableComponentName(crudView.createViewName()));
-			resource.setEditViewName(getNullableComponentName(crudView.editViewName()));
-		} else if (menuAndView.view instanceof CustomView) {
-			CustomView customView = (CustomView)menuAndView.view;
-			resource.setListViewName(customView.viewName());
+		} else if (menuAndElement.element instanceof Resource) {
+			Resource resource = (Resource)menuAndElement.element;
+			
+			if (!"".equals(resource.recordRepresentation()))
+				treeMenuSupportedResource.setRecordRepresentation(resource.recordRepresentation());
+			
+			treeMenuSupportedResource.setListViewName(getNullableComponentName(resource.listViewName()));
+			treeMenuSupportedResource.setShowViewName(getNullableComponentName(resource.showViewName()));
+			treeMenuSupportedResource.setCreateViewName(getNullableComponentName(resource.createViewName()));
+			treeMenuSupportedResource.setEditViewName(getNullableComponentName(resource.editViewName()));
+		} else if (menuAndElement.element instanceof CustomView) {
+			CustomView view = (CustomView)menuAndElement.element;
+			treeMenuSupportedResource.setListViewName(view.viewName());
 		} else {
-			throw new RuntimeException(String.format("Error: Unknown type of view. View class: '%s'.", menuAndView.view.getClass()));
+			throw new RuntimeException(String.format("Error: Unknown type of element. Element class: '%s'.", menuAndElement.element.getClass()));
 		}
 		
-		return resource;
+		return treeMenuSupportedResource;
 	}
 
 	private String getNullableComponentName(String componentName) {
 		return "".equals(componentName) ? null : componentName;
 	}
 
-	private List<MenuAndView> getMenuAndViews(MenuAndView parent) {
-		List<MenuAndView> children = findChildren(parent);
+	private List<MenuAndElement> getMenuAndElements(MenuAndElement parent) {
+		List<MenuAndElement> children = findChildren(parent);
 		
 		
-		List<MenuAndView> allMenuAndViews = new ArrayList<>();
+		List<MenuAndElement> allMenuAndElements = new ArrayList<>();
 		for (int i = 0; i < children.size(); i++) {
-			MenuAndView child = children.get(i);
+			MenuAndElement child = children.get(i);
 			
 			if (child.menu.leaf) {
-				allMenuAndViews.add(child);
+				allMenuAndElements.add(child);
 			} else {
-				List<MenuAndView> descendants = findDescendants(child);
+				List<MenuAndElement> descendants = findDescendants(child);
 				if (!noLeafMenu(descendants)) {
-					allMenuAndViews.add(child);
-					allMenuAndViews.addAll(descendants);
+					allMenuAndElements.add(child);
+					allMenuAndElements.addAll(descendants);
 				}				
 			}
 		}
 		
-		return allMenuAndViews;
+		return allMenuAndElements;
 	}
 
-	private boolean noLeafMenu(List<MenuAndView> descendants) {
-		for (MenuAndView descendant : descendants) {
+	private boolean noLeafMenu(List<MenuAndElement> descendants) {
+		for (MenuAndElement descendant : descendants) {
 			if (descendant.menu.leaf)
 				return false;
 		}
@@ -105,41 +110,41 @@ public class UiConfigurationController implements IPluginManagerAware, Applicati
 		return true;
 	}
 
-	private List<MenuAndView> findChildren(MenuAndView parent) {
+	private List<MenuAndElement> findChildren(MenuAndElement parent) {
 		String parentMenuName = parent == null ? "" : parent.menu.name;
 		
-		List<MenuAndView> children = new ArrayList<>();
+		List<MenuAndElement> children = new ArrayList<>();
 		for (Menu menu : menus) {
 			if (parentMenuName.equals(menu.parent))
-				children.add(new MenuAndView(menu));
+				children.add(new MenuAndElement(menu));
 		}
 		
-		for (CrudView crudView : crudViews) {
-			if (parentMenuName.equals(crudView.menu().parent()))
-				children.add(new MenuAndView(getMenu(crudView.name(), crudView.menu()), crudView));
+		for (Resource resource : resources) {
+			if (parentMenuName.equals(resource.menu().parent()))
+				children.add(new MenuAndElement(getMenu(resource.name(), resource.menu()), resource));
 		}
 		
 		for (CustomView customView : customViews) {
 			if (parentMenuName.equals(customView.menu().parent()))
-				children.add(new MenuAndView(getMenu(customView.name(), customView.menu()), customView));
+				children.add(new MenuAndElement(getMenu(customView.name(), customView.menu()), customView));
 		}
 		
-		children.sort(new Comparator<MenuAndView>() {
+		children.sort(new Comparator<MenuAndElement>() {
 			@Override
-			public int compare(MenuAndView menuAndView1, MenuAndView menuAndView2) {
-				return menuAndView2.menu.priority - menuAndView1.menu.priority;
+			public int compare(MenuAndElement menuAndElement1, MenuAndElement menuAndElement2) {
+				return menuAndElement2.menu.priority - menuAndElement1.menu.priority;
 			}
 		});
 		
 		return children;
 	}
 	
-	private List<MenuAndView> findDescendants(MenuAndView ancestor) {
-		List<MenuAndView> descendants = new ArrayList<>();
+	private List<MenuAndElement> findDescendants(MenuAndElement ancestor) {
+		List<MenuAndElement> descendants = new ArrayList<>();
 		
-		List<MenuAndView> children = findChildren(ancestor);
+		List<MenuAndElement> children = findChildren(ancestor);
 		for (int i = 0; i < children.size(); i++) {
-			MenuAndView child = children.get(i);
+			MenuAndElement child = children.get(i);
 			descendants.add(child);
 			descendants.addAll(findDescendants(child));
 		}
@@ -147,40 +152,40 @@ public class UiConfigurationController implements IPluginManagerAware, Applicati
 		return descendants;
 	}
 
-	private Menu getMenu(String viewName, ViewMenu viewMenu) {
-		return new Menu(viewName, 
-				viewMenu.label() != null ? viewMenu.label() : viewName,
-				"".equals(viewMenu.parent()) ? null : viewMenu.parent(),
-				true, viewMenu.priority());
+	private Menu getMenu(String elementName, BootMenu bootMenu) {
+		return new Menu(elementName, 
+				bootMenu.label() != null ? bootMenu.label() : elementName,
+				"".equals(bootMenu.parent()) ? null : bootMenu.parent(),
+				true, bootMenu.priority());
 	}
 	
-	private class MenuAndView {
+	private class MenuAndElement {
 		public Menu menu;
-		public Object view;
+		public Object element;
 		
-		public MenuAndView(Menu menu) {
+		public MenuAndElement(Menu menu) {
 			this(menu, null);
 		}
 		
-		public MenuAndView(Menu menu, Object view) {
+		public MenuAndElement(Menu menu, Object element) {
 			this.menu = menu;
-			this.view = view;
+			this.element = element;
 		}
 	}
 	
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		crudViews = new ArrayList<>();
+		resources = new ArrayList<>();
 		customViews = new ArrayList<>();
 		
 		String[] restControllerBeanNames = applicationContext.getBeanNamesForAnnotation(RestController.class);
 		for (String restControllerBeanName : restControllerBeanNames) {
 			Class<?> restControllerClass = applicationContext.getType(restControllerBeanName);
 			
-			CrudView[] someCrudViews = restControllerClass.getAnnotationsByType(CrudView.class);
-			if (someCrudViews != null && someCrudViews.length > 0) {
-				for (CrudView crudView : someCrudViews) {
-					crudViews.add(crudView);
+			Resource[] someResources = restControllerClass.getAnnotationsByType(Resource.class);
+			if (someResources != null && someResources.length > 0) {
+				for (Resource resource : someResources) {
+					resources.add(resource);
 				}
 			}
 			
@@ -221,7 +226,7 @@ public class UiConfigurationController implements IPluginManagerAware, Applicati
 	@Override
 	public void afterPropertiesSet() throws Exception {
 		uiConfiguration = new UiConfiguration();
-		uiConfiguration.setResources(generateResources());
+		uiConfiguration.setResources(generateTreeMenuSupportedResources());
 	}
 	
 	private class Menu {

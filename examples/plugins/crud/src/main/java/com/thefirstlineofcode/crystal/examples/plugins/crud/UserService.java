@@ -9,11 +9,11 @@ import org.springframework.stereotype.Service;
 
 import com.thefirstlineofcode.crystal.examples.plugins.data.accessor.User;
 import com.thefirstlineofcode.crystal.examples.plugins.data.accessor.UserRepository;
-import com.thefirstlineofcode.crystal.framework.crud.jpa.BasicCrudService;
+import com.thefirstlineofcode.crystal.framework.crud.jpa.LongTypeIdBasicCrudService;
 import com.thefirstlineofcode.crystal.framework.data.Filters;
 
 @Service
-public class UserService extends BasicCrudService<User, Long> implements IUserService {
+public class UserService extends LongTypeIdBasicCrudService<User> implements IUserService {
 	@Autowired
 	private UserRepository userRepository;
 	

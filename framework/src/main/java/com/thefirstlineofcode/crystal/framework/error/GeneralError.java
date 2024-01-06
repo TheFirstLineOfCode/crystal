@@ -1,7 +1,7 @@
 package com.thefirstlineofcode.crystal.framework.error;
 
 public enum GeneralError {
-	@ErrorCode(value = Code.INTERNAL_SERVER_ERROR, description = "System error. For example: Failed to parsing parameters, Can't access database, ....")
+	@ErrorCode(value = Code.INTERNAL_SERVER_ERROR, description = "System error. For example: Failed to parse parameters, Can't access database, ....")
 	INTERNAL_SERVER_ERROR;
 	
 	public interface Code {

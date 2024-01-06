@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ViewMenu {
+public @interface BootMenu {
 	public static final int PRIORITY_HIGH = 2000;
 	public static final int PRIORITY_MEDIUM = 1000;
 	public static final int PRIORITY_LOW = 200;

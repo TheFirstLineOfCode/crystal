@@ -7,18 +7,18 @@ import org.springframework.web.bind.annotation.RestController;
 import com.thefirstlineofcode.crystal.examples.plugins.data.accessor.User;
 import com.thefirstlineofcode.crystal.framework.crud.BasicCrudController;
 import com.thefirstlineofcode.crystal.framework.crud.IBasicCrudService;
-import com.thefirstlineofcode.crystal.framework.ui.CrudView;
-import com.thefirstlineofcode.crystal.framework.ui.ViewMenu;
+import com.thefirstlineofcode.crystal.framework.ui.BootMenu;
+import com.thefirstlineofcode.crystal.framework.ui.reactadmin.Resource;
 
 @RestController
 @RequestMapping("/users")
-@CrudView(name = "users", listViewName = "UserListView", menu = @ViewMenu(label = "ca.title.users", priority = ViewMenu.PRIORITY_MEDIUM + 500))
-public class UserController extends BasicCrudController<User> {
+@Resource(name = "users", recordRepresentation = "name", listViewName = "UserListView", menu = @BootMenu(label = "ca.title.users", priority = BootMenu.PRIORITY_MEDIUM + 500))
+public class UserController extends BasicCrudController<User, Long> {
 	@Autowired
 	private UserService userService;
 	
 	@Override
-	public IBasicCrudService<User> getService() {
+	public IBasicCrudService<User, Long> getService() {
 		return userService;
 	}
 }

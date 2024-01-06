@@ -3,6 +3,7 @@ package com.thefirstlineofcode.crystal.plugins.react.admin;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import javax.naming.OperationNotSupportedException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -17,7 +18,7 @@ import org.springframework.http.HttpHeaders;
 import com.thefirstlineofcode.crystal.framework.crud.IBasicCrudService;
 import com.thefirstlineofcode.crystal.framework.data.Filters;
 import com.thefirstlineofcode.crystal.framework.data.IDataProtocolAdapter;
-import com.thefirstlineofcode.crystal.framework.data.QueryParams;
+import com.thefirstlineofcode.crystal.framework.data.ListQueryParams;
 
 @Extension
 public class RaSimpleRestDataProtocolAdapter implements IDataProtocolAdapter {
@@ -28,8 +29,10 @@ public class RaSimpleRestDataProtocolAdapter implements IDataProtocolAdapter {
 	private static final String PARAM_NAME_RANGE = "range";
 
 	@Override
-	public QueryParams getQueryParams(HttpServletRequest request, HttpHeaders httpHeaders, Map<String, String> requestParameters) {
+	public ListQueryParams getListQueryParams(HttpServletRequest request, HttpHeaders httpHeaders, Map<String, String> requestParameters) {
 		Range range = getRange(requestParameters);
+		
+		Filters filters = getFilters(requestParameters);
 		
 		int pageSize = getPageSize(range);
 		int page = getPage(range, pageSize);
@@ -43,11 +46,9 @@ public class RaSimpleRestDataProtocolAdapter implements IDataProtocolAdapter {
 			pageable = PageRequest.of(page, pageSize, Sort.by(order));
 		}
 		
-		Filters filters = getFilters(requestParameters);
-		
-		return new QueryParams(request.getServletPath(), pageable, filters);
+		return new ListQueryParams(request.getServletPath(), pageable, filters);	
 	}
-	
+
 	private Filters getFilters(Map<String, String> requestParameters) {
 		Filters filters = new Filters();
 		String sFilters = requestParameters.get("filter");
@@ -60,16 +61,54 @@ public class RaSimpleRestDataProtocolAdapter implements IDataProtocolAdapter {
 		if ("{}".equals(sFilters))
 			return filters;
 			
-		sFilters = sFilters.substring(1, sFilters.length() - 1);
+		if (sFilters.startsWith("{") && sFilters.endsWith("}"))
+			sFilters = sFilters.substring(1, sFilters.length() - 1);
 		
-		StringTokenizer st = new StringTokenizer(sFilters, ",");
-		if (st.countTokens() == 0)
-			throw new RuntimeException("Bad filters format.");
-		
-		while (st.hasMoreTokens()) {
-			String sFilter = st.nextToken();
+		while (sFilters.length() > 0) {
+			if (sFilters.startsWith(","))
+				sFilters = sFilters.substring(1);
 			
-			addFilter(filters, sFilter);
+			int colonIndex = sFilters.indexOf(':');
+			if (colonIndex == -1)
+				throw new RuntimeException("Bad filters format.");
+			
+			String filterName = sFilters.substring(0, colonIndex).trim();
+			if (filterName.startsWith("\"") && filterName.endsWith("\""))
+				filterName = filterName.substring(1, filterName.length() - 1);
+			
+			sFilters = sFilters.substring(colonIndex + 1);
+			if (sFilters.startsWith("[")) {
+				int rightSquareBracketIndex = sFilters.indexOf(']');
+				if (rightSquareBracketIndex == -1)
+					throw new RuntimeException("Bad filters format.");
+					
+				String value = sFilters.substring(1, rightSquareBracketIndex);
+				filters.addFilter(filterName, value);
+				
+				sFilters = sFilters.substring(rightSquareBracketIndex + 1);
+			} else if (sFilters.startsWith("\"")) {				
+				sFilters = sFilters.substring(1, sFilters.length());
+				
+				int quotationMarkIndex = sFilters.indexOf('"');
+				if (quotationMarkIndex == -1)
+					throw new RuntimeException("Bad filters format.");
+				
+				String value = sFilters.substring(0, quotationMarkIndex);
+				filters.addFilter(filterName, value);
+				
+				sFilters = sFilters.substring(quotationMarkIndex + 1);
+			} else if (sFilters.startsWith("{")) {
+				sFilters = sFilters.substring(1, sFilters.length());
+				
+				int rightBraceIndex = sFilters.indexOf('}');
+				if (rightBraceIndex == -1)
+					throw new RuntimeException("Bad filters format.");
+				
+				String value = sFilters.substring(0, rightBraceIndex);
+				addFilter(filters, value);
+				
+				sFilters = sFilters.substring(rightBraceIndex + 1);
+			}
 		}
 		
 		return filters;
@@ -122,7 +161,7 @@ public class RaSimpleRestDataProtocolAdapter implements IDataProtocolAdapter {
 		}
 	}
 	
-	private Range getRange(QueryParams queryParams) {
+	private Range getRange(ListQueryParams queryParams) {
 		Pageable pageable = queryParams.pageable;
 		
 		int pageNumber = pageable.getPageNumber();
@@ -192,7 +231,7 @@ public class RaSimpleRestDataProtocolAdapter implements IDataProtocolAdapter {
 
 
 	@Override
-	public void prepareResponse(HttpServletResponse response, QueryParams queryParams, IBasicCrudService<?> service) {
+	public void prepareResponse(HttpServletResponse response, ListQueryParams queryParams, IBasicCrudService<?, ?> service) {
 		response.addHeader("Access-Control-Expose-Headers", RESPONSE_HEADER_NAME_CONTENT_RANGE);
 		
 		String resource = queryParams.path.substring(1);
@@ -229,5 +268,70 @@ public class RaSimpleRestDataProtocolAdapter implements IDataProtocolAdapter {
 		} catch (NumberFormatException e) {
 			throw new RuntimeException("Bad data range format.");
 		}
+	}
+
+	@Override
+	public boolean isGetOneRequest(HttpServletRequest request, HttpHeaders httpHeaders,
+			Map<String, String> requestParameters) {
+		throw new RuntimeException(new OperationNotSupportedException("No supported!!!"));
+	}
+	
+	private String[] getValuesArray(String sValues) {
+		StringTokenizer st = new StringTokenizer(sValues, ",");
+		
+		String[] values = new String[st.countTokens()];
+		
+		int i = 0;
+		while (st.hasMoreTokens()) {
+			values[i] = st.nextToken();
+			i++;
+		}
+		
+		return values;
+	}
+
+	@Override
+	public boolean isGetManyRequest(HttpServletRequest request, HttpHeaders httpHeaders,
+					Map<String, String> requestParameters) {
+		Filters filters = getFilters(requestParameters);
+		if (filters == null || filters.noFilters())
+			return false;
+		
+		if (filters.size() != 1)
+			return false;
+		
+		if (!"id".equals(filters.getFilterNames()[0]))
+			return false;
+		
+		return true;
+	}
+
+	@Override
+	public boolean isGetListRequest(HttpServletRequest request, HttpHeaders httpHeaders,
+				Map<String, String> requestParameters) {
+		try {
+			return getRange(requestParameters) != null;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
+	@Override
+	public boolean isGetManyReferenceRequest(HttpServletRequest request, HttpHeaders httpHeaders,
+			Map<String, String> requestParameters) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public String[] getManyIds(HttpServletRequest request, HttpHeaders httpHeaders,
+			Map<String, String> requestParameters) {
+		Filters filters = getFilters(requestParameters);
+		String sIds = filters.getString("id");
+		
+		if (sIds.startsWith("[") && sIds.endsWith("]"))
+			sIds = sIds.substring(1, sIds.length() - 1);
+		
+		return getValuesArray(sIds);
 	}
 }

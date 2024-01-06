@@ -6,10 +6,10 @@ import org.springframework.stereotype.Service;
 
 import com.thefirstlineofcode.crystal.examples.plugins.data.accessor.Post;
 import com.thefirstlineofcode.crystal.examples.plugins.data.accessor.PostRepository;
-import com.thefirstlineofcode.crystal.framework.crud.jpa.BasicCrudService;
+import com.thefirstlineofcode.crystal.framework.crud.jpa.LongTypeIdBasicCrudService;
 
 @Service
-public class PostService extends BasicCrudService<Post, Long> implements IPostService {
+public class PostService extends LongTypeIdBasicCrudService<Post> implements IPostService {
 	@Autowired
 	private PostRepository postRepository;
 	

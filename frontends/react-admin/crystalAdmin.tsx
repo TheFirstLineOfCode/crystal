@@ -96,10 +96,26 @@ function getResourceConfigurations(resources, applicationViews) {
 			}
 		}
 		
+		let showComponent;
+		if (!resource.parentMenu) {
+			if (resource.showViewName !== undefined) {
+				showComponent = applicationViews.get(resource.showViewName);
+			} else {
+				showComponent = ShowGuesser;
+			}
+		}
+		
+		let recordRepresentation;
+		if (resource.recordRepresentation !== undefined) {
+			recordRepresentation = resource.recordRepresentation;
+		}
+		
 		const resourceConfiguration = {
 			"name": resource.name,
 			"options": options,
-			"list": listComponent
+			"list": listComponent,
+			"show": showComponent,
+			"recordRepresentation": recordRepresentation
 		};
 		
 		resourceConfigurations[index++] = resourceConfiguration;
@@ -114,8 +130,8 @@ export const CrystalAdmin = ({configuration, applicationViews}) => {
 	return (
 		<Admin layout={CrystalLayout} dataProvider={configuration.dataProvider} i18nProvider={i18nProvider}>
 			{
-				resourceConfigurations.map(resourceConfiguration => (	
-					<Resource key={resourceConfiguration.name} name={resourceConfiguration.name} options={resourceConfiguration.options} list={resourceConfiguration.list} />
+				resourceConfigurations.map(resourceConfiguration => (
+						<Resource key={resourceConfiguration.name} name={resourceConfiguration.name} recordRepresentation={resourceConfiguration.recordRepresentation} options={resourceConfiguration.options} list={resourceConfiguration.list} show={resourceConfiguration.show}/>
 				))
 			}
 		</Admin>

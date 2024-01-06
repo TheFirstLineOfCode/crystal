@@ -4,16 +4,18 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 @JsonInclude(Include.NON_NULL)
-public class Resource {
+public class TreeMenuSupportedResource {
 	private String name;
 	private String label;
 	private boolean parentMenu;
 	private String menuParent;
+	private String recordRepresentation;
 	private String listViewName;
+	private String showViewName;
 	private String createViewName;
 	private String editViewName;
 	
-	public Resource(String name, String label, boolean parentMenu, String menuParent) {
+	public TreeMenuSupportedResource(String name, String label, boolean parentMenu, String menuParent) {
 		this.name = name;
 		this.label = label;
 		this.parentMenu = parentMenu;
@@ -51,6 +53,14 @@ public class Resource {
 	public void setMenuParent(String menuParent) {
 		this.menuParent = menuParent;
 	}
+	
+	public String getRecordRepresentation() {
+		return recordRepresentation;
+	}
+
+	public void setRecordRepresentation(String recordRepresentation) {
+		this.recordRepresentation = recordRepresentation;
+	}
 
 	public String getListViewName() {
 		return listViewName;
@@ -58,6 +68,14 @@ public class Resource {
 
 	public void setListViewName(String listViewName) {
 		this.listViewName = listViewName;
+	}
+	
+	public String getShowViewName() {
+		return showViewName;
+	}
+	
+	public void setShowViewName(String showViewName) {
+		this.showViewName = showViewName;
 	}
 
 	public String getCreateViewName() {

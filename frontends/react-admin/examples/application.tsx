@@ -1,9 +1,11 @@
 import Button from '@mui/material/Button';
 import {fetchUtils} from 'react-admin';
 import {getServiceUrl} from './crystalAdmin'
-import {AboutView} from './aboutView'
-import {TestDataView} from './testDataView'
-import {UserListView} from './userListView'
+import {AboutView} from './AboutView'
+import {TestDataView} from './TestDataView'
+import {UserListView} from './UserListView'
+import {PostListView} from './PostListView'
+import {PostShowView} from './PostShowView'
 
 export function customizeDataProvider(dataProvider) {
 	dataProvider.loadTestData = function() {
@@ -30,6 +32,8 @@ export function getApplicationViews() {
 		['TestDataView', TestDataView],
 		['AboutView', AboutView],
 		['UserListView', UserListView],
+		['PostListView', PostListView],
+		['PostShowView', PostShowView]
 	]);
 	
 	return applicationViews;

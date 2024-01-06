@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 
-import com.thefirstlineofcode.crystal.framework.ui.CustomView;
-import com.thefirstlineofcode.crystal.framework.ui.ViewMenu;
+import com.thefirstlineofcode.crystal.framework.ui.BootMenu;
+import com.thefirstlineofcode.crystal.framework.ui.reactadmin.CustomView;
 
 @RestController
 @RequestMapping("/test-data")
-@CustomView(name = "test-data", viewName = "TestDataView", menu = @ViewMenu(parent = "tools", label = "ca.title.testData"))
+@CustomView(name = "test-data", viewName = "TestDataView", menu = @BootMenu(parent = "tools", label = "ca.title.testData"))
 public class TestDataController {
 	@Autowired
 	private ITestDataService testDataService;
