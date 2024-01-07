@@ -7,7 +7,7 @@ const userFilters = [
 
 export const UserListView = () => (
 	<List filters = {userFilters}>
-		<Datagrid rowClick="edit">
+		<Datagrid bulkActionButtons={false} rowClick="show">
 			<TextField source="id" />
 			<TextField source="name" />
 			<EmailField source="email" />

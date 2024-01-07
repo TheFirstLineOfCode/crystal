@@ -7,8 +7,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.http.HttpHeaders;
 
-public interface IBasicCrudController<T, ID> {
+import com.thefirstlineofcode.crystal.framework.data.IIdProvider;
+
+public interface IBasicCrudController<ID, T extends IIdProvider<ID>> {
 	public Object getResources(HttpServletRequest request, HttpHeaders httpHeaders,
 			Map<String, String> requestParameters, HttpServletResponse response);
-	IBasicCrudService<T, ID> getService();
+	public T getResource(ID id);
+	public T updateResource(ID id, T updated);
+	public void deleteResource(ID id);
+	IBasicCrudService<ID, T> getService();
 }

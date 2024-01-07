@@ -29,7 +29,7 @@ public class RaSimpleRestDataProtocolAdapter implements IDataProtocolAdapter {
 	private static final String PARAM_NAME_RANGE = "range";
 
 	@Override
-	public ListQueryParams getListQueryParams(HttpServletRequest request, HttpHeaders httpHeaders, Map<String, String> requestParameters) {
+	public ListQueryParams parseListQueryParams(HttpServletRequest request, HttpHeaders httpHeaders, Map<String, String> requestParameters) {
 		Range range = getRange(requestParameters);
 		
 		Filters filters = getFilters(requestParameters);
@@ -231,7 +231,7 @@ public class RaSimpleRestDataProtocolAdapter implements IDataProtocolAdapter {
 
 
 	@Override
-	public void prepareResponse(HttpServletResponse response, ListQueryParams queryParams, IBasicCrudService<?, ?> service) {
+	public void prepareListResponse(HttpServletResponse response, ListQueryParams queryParams, IBasicCrudService<?, ?> service) {
 		response.addHeader("Access-Control-Expose-Headers", RESPONSE_HEADER_NAME_CONTENT_RANGE);
 		
 		String resource = queryParams.path.substring(1);
@@ -324,7 +324,7 @@ public class RaSimpleRestDataProtocolAdapter implements IDataProtocolAdapter {
 	}
 
 	@Override
-	public String[] getManyIds(HttpServletRequest request, HttpHeaders httpHeaders,
+	public String[] parseManyIds(HttpServletRequest request, HttpHeaders httpHeaders,
 			Map<String, String> requestParameters) {
 		Filters filters = getFilters(requestParameters);
 		String sIds = filters.getString("id");

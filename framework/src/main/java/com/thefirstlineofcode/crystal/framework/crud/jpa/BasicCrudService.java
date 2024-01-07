@@ -12,9 +12,10 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.thefirstlineofcode.crystal.framework.crud.IBasicCrudService;
 import com.thefirstlineofcode.crystal.framework.data.Filters;
+import com.thefirstlineofcode.crystal.framework.data.IIdProvider;
 import com.thefirstlineofcode.crystal.framework.data.ListQueryParams;
 
-public abstract class BasicCrudService<T, ID> implements IBasicCrudService<T, ID> {
+public abstract class BasicCrudService<ID, T extends IIdProvider<ID>> implements IBasicCrudService<ID, T> {
 
 	@Override
 	public List<T> getList(ListQueryParams listQueryParams) {
@@ -65,6 +66,16 @@ public abstract class BasicCrudService<T, ID> implements IBasicCrudService<T, ID
 		}
 		
 		return many;
+	}
+	
+	@Override
+	public T update(T t) {
+		return getRepository().save(t);
+	}
+	
+	@Override
+	public void deleteById(ID id) {
+		getRepository().deleteById(id);
 	}
 	
 	protected abstract ID[] getIds(String[] sIds);

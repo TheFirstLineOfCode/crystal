@@ -15,7 +15,7 @@ public interface IDataProtocolAdapter extends ExtensionPoint {
 	boolean isGetManyRequest(HttpServletRequest request, HttpHeaders httpHeaders, Map<String, String> requestParameters);
 	boolean isGetListRequest(HttpServletRequest request, HttpHeaders httpHeaders, Map<String, String> requestParameters);
 	boolean isGetManyReferenceRequest(HttpServletRequest request, HttpHeaders httpHeaders, Map<String, String> requestParameters);
-	ListQueryParams getListQueryParams(HttpServletRequest request, HttpHeaders httpHeaders, Map<String, String> requestParameters);
-	String[] getManyIds(HttpServletRequest request, HttpHeaders httpHeaders, Map<String, String> requestParameters);
-	public void prepareResponse(HttpServletResponse response, ListQueryParams queryParams, IBasicCrudService<?, ?> service);
+	ListQueryParams parseListQueryParams(HttpServletRequest request, HttpHeaders httpHeaders, Map<String, String> requestParameters);
+	String[] parseManyIds(HttpServletRequest request, HttpHeaders httpHeaders, Map<String, String> requestParameters);
+	public void prepareListResponse(HttpServletResponse response, ListQueryParams queryParams, IBasicCrudService<?, ?> service);
 }

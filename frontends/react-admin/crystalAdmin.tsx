@@ -105,6 +105,13 @@ function getResourceConfigurations(resources, applicationViews) {
 			}
 		}
 		
+		let editComponent;
+		if (!resource.parentMenu) {
+			if (resource.editViewName !== undefined) {
+				editComponent = applicationViews.get(resource.editViewName);
+			}
+		}
+		
 		let recordRepresentation;
 		if (resource.recordRepresentation !== undefined) {
 			recordRepresentation = resource.recordRepresentation;
@@ -115,6 +122,7 @@ function getResourceConfigurations(resources, applicationViews) {
 			"options": options,
 			"list": listComponent,
 			"show": showComponent,
+			"edit": editComponent,
 			"recordRepresentation": recordRepresentation
 		};
 		
@@ -131,7 +139,7 @@ export const CrystalAdmin = ({configuration, applicationViews}) => {
 		<Admin layout={CrystalLayout} dataProvider={configuration.dataProvider} i18nProvider={i18nProvider}>
 			{
 				resourceConfigurations.map(resourceConfiguration => (
-						<Resource key={resourceConfiguration.name} name={resourceConfiguration.name} recordRepresentation={resourceConfiguration.recordRepresentation} options={resourceConfiguration.options} list={resourceConfiguration.list} show={resourceConfiguration.show}/>
+						<Resource key={resourceConfiguration.name} name={resourceConfiguration.name} recordRepresentation={resourceConfiguration.recordRepresentation} options={resourceConfiguration.options} list={resourceConfiguration.list} show={resourceConfiguration.show} edit={resourceConfiguration.edit}/>
 				))
 			}
 		</Admin>

@@ -13,12 +13,22 @@ import com.thefirstlineofcode.crystal.framework.ui.reactadmin.Resource;
 @RestController
 @RequestMapping("/users")
 @Resource(name = "users", recordRepresentation = "name", listViewName = "UserListView", menu = @BootMenu(label = "ca.title.users", priority = BootMenu.PRIORITY_MEDIUM + 500))
-public class UserController extends BasicCrudController<User, Long> {
+public class UserController extends BasicCrudController<Long, User> {
 	@Autowired
 	private UserService userService;
 	
 	@Override
-	public IBasicCrudService<User, Long> getService() {
+	public IBasicCrudService<Long, User> getService() {
 		return userService;
+	}
+	
+	@Override
+	protected boolean isDeleteResourceEnabled() {
+		return false;
+	}
+	
+	@Override
+	protected boolean isUpdateResourceEnabled() {
+		return false;
 	}
 }

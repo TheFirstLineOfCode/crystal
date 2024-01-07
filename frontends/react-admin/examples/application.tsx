@@ -4,8 +4,9 @@ import {getServiceUrl} from './crystalAdmin'
 import {AboutView} from './AboutView'
 import {TestDataView} from './TestDataView'
 import {UserListView} from './UserListView'
-import {PostListView} from './PostListView'
-import {PostShowView} from './PostShowView'
+import {PostListView} from './posts/PostListView'
+import {PostShowView} from './posts/PostShowView'
+import {PostEditView} from './posts/PostEditView'
 
 export function customizeDataProvider(dataProvider) {
 	dataProvider.loadTestData = function() {
@@ -33,7 +34,8 @@ export function getApplicationViews() {
 		['AboutView', AboutView],
 		['UserListView', UserListView],
 		['PostListView', PostListView],
-		['PostShowView', PostShowView]
+		['PostShowView', PostShowView],
+		['PostEditView', PostEditView]
 	]);
 	
 	return applicationViews;

@@ -2,43 +2,43 @@ package com.thefirstlineofcode.crystal.framework.error;
 
 import java.lang.reflect.Field;
 
-public class ErrorWrappedException extends RuntimeException implements IError {
+public class ApplicationException extends RuntimeException implements IError {
 	private static final long serialVersionUID = -8323561850581280796L;
 	
 	protected Enum<?> error;
 	protected Object data;
 
-	public ErrorWrappedException(Enum<?> error) {
+	public ApplicationException(Enum<?> error) {
 		this.error = error;
 	}
 	
-	public ErrorWrappedException(Enum<?> error, Throwable t) {
+	public ApplicationException(Enum<?> error, Throwable t) {
 		super(t);
 		this.error = error;
 	}
 	
-	public ErrorWrappedException(Enum<?> error, String message) {
+	public ApplicationException(Enum<?> error, String message) {
 		super(message);
 		this.error = error;
 	}
 	
-	public ErrorWrappedException(Enum<?> error, String message, Throwable t) {
+	public ApplicationException(Enum<?> error, String message, Throwable t) {
 		super(message, t);
 		this.error = error;
 	}
 	
-	public ErrorWrappedException(Enum<?> error, Object data) {
+	public ApplicationException(Enum<?> error, Object data) {
 		this.error = error;
 		this.data = data;
 	}
 	
-	public ErrorWrappedException(Enum<?> error, Object data, String message) {
+	public ApplicationException(Enum<?> error, Object data, String message) {
 		super(message);
 		this.error = error;
 		this.data = data;
 	}
 	
-	public ErrorWrappedException(Enum<?> error, Object data, String message, Throwable t) {
+	public ApplicationException(Enum<?> error, Object data, String message, Throwable t) {
 		super(message, t);
 		this.error = error;
 		this.data = data;
